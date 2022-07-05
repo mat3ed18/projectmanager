@@ -32,3 +32,7 @@ CREATE TABLE MEMBROS (
 );
 
 INSERT INTO pessoa (nome, datanascimento, cpf, funcionario) VALUES ('Mateus Silva', '1998-08-22', '999.999.999-99', TRUE);
+
+UPDATE pessoa p SET p.nome = ?, p.datanascimento = ?, p.cpf = ?, p.funcionario = ? WHERE p.id = 1;
+
+DELETE FROM pessoa WHERE id = ?;
