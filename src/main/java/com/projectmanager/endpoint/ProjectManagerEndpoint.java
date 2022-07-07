@@ -6,10 +6,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping(value = "/api", produces = "application/json")
 public class ProjectManagerEndpoint {
-    @GetMapping(value = "/pessoas", produces = {"application/json"})
-    public ResponseEntity<?> listarPessoas() {
+    
+    @GetMapping("/pessoas")
+    public ResponseEntity<?> getPessoas() {
+        ResponseEntity.status(200);
         return ResponseEntity.ok("{\"teste\": \"ok\"}");
     }
+    
 }

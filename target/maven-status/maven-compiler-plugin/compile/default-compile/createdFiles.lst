@@ -1,2 +1,3 @@
 com\projectmanager\ViewResolver.class
+com\projectmanager\endpoint\ProjectManagerEndpoint.class
 com\projectmanager\Application.class
