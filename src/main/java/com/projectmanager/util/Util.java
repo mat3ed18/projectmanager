@@ -1,6 +1,5 @@
 package com.projectmanager.util;
 
-import com.projectmanager.database.postgresql.dao.PessoaDAO;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -12,7 +11,7 @@ import java.util.Locale;
 
 public class Util {
     public static void main(String[] args) throws SQLException {
-        System.out.println(PessoaDAO.get(3));
+        System.out.println();
     }
     
     public static boolean isCpf(String str) {
@@ -59,6 +58,10 @@ public class Util {
             
         }
         return fullQuery;
+    }
+    
+    public static String getRows() {
+        return "";
     }
     
     public static boolean isNumeric(String str) {

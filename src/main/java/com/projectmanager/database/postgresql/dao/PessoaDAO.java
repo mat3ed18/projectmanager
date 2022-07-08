@@ -13,16 +13,13 @@ import java.util.List;
 import lombok.Cleanup;
 
 public class PessoaDAO {
-    private static final String colunasTabela = "nome, datanascimento, cpf, funcionario"; // 4
-    private static final String colunasUpdate = "p.nome = ?, p.datanascimento = ?, p.cpf = ?, p.funcionario = ?"; // 4
-    
-    public static final String CRESCENTE = "ASC";
-    public static final String DECRESCENTE = "DESC";
+    private static final String COLUNAS_TABELA = "nome, datanascimento, cpf, funcionario"; // 4
+    private static final String COLUNAS_UPDATE = "p.nome = ?, p.datanascimento = ?, p.cpf = ?, p.funcionario = ?"; // 4
     
     public static long insert(Pessoa pessoa) throws SQLException {
         try (
             java.sql.Connection conn = Connection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO pessoa (" + colunasTabela + ") VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO pessoa (" + COLUNAS_TABELA + ") VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
         ) {
             stmt.setString(1, pessoa.getNome());
             stmt.setDate(2, Date.valueOf(pessoa.getDataNascimento().toString()));
@@ -40,7 +37,7 @@ public class PessoaDAO {
     public static int update(Pessoa pessoa) throws SQLException {
         try (
             java.sql.Connection conn = Connection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("UPDATE pessoa p SET " + colunasUpdate + " WHERE p.id = ?");
+            PreparedStatement stmt = conn.prepareStatement("UPDATE pessoa p SET " + COLUNAS_UPDATE + " WHERE p.id = ?");
         ) {
             stmt.setString(1, pessoa.getNome());
             stmt.setDate(2, Date.valueOf(pessoa.getDataNascimento().toString()));
@@ -62,9 +59,10 @@ public class PessoaDAO {
     }
     
     public static Pessoa get(long id) throws SQLException {
+//        Config.ROWS = 10;
         try (
             java.sql.Connection conn = Connection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("SELECT p.id, " + Util.formatarColunas(colunasTabela, "p") + " FROM pessoa p WHERE p.id = ?");
+            PreparedStatement stmt = conn.prepareStatement("SELECT p.id, " + Util.formatarColunas(COLUNAS_TABELA, "p") + " FROM pessoa p WHERE p.id = ?");
         ) {
             stmt.setLong(1, id);
             return getPessoa(stmt);
@@ -72,28 +70,27 @@ public class PessoaDAO {
     }
     
     /**
-    * Retorna o objeto da pessoa encontrada através de seu CPF
-    *
-    * @param pessoa Objeto da pessoa criada
-    * @return o objeto do tipo Pessoa
+        * Retorna o objeto da pessoa encontrada através de seu CPF
+        *
+        * @param pessoa Objeto da pessoa criada
+        * @return o objeto do tipo Pessoa
+        * @throws java.sql.SQLException
     */
     
     public static Pessoa get(Pessoa pessoa) throws SQLException {
         try (
             java.sql.Connection conn = Connection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("SELECT p.id, " + Util.formatarColunas(colunasTabela, "p") + " FROM pessoa p WHERE p.cpf = ?");
+            PreparedStatement stmt = conn.prepareStatement("SELECT p.id, " + Util.formatarColunas(COLUNAS_TABELA, "p") + " FROM pessoa p WHERE p.cpf = ?");
         ) {
             stmt.setString(1, pessoa.getCpf());
             return getPessoa(stmt);
         }
     }
-    
-    
-    
+        
     public static List<Pessoa> list(String coluna, String ordem, long limit, long offset) throws SQLException {
         try (
             java.sql.Connection conn = Connection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(String.format("SELECT p.id, %s FROM pessoa p ORDER BY %s %s LIMIT ?, ?", Util.formatarColunas(colunasTabela, "p"), "p." + coluna, ordem));
+            PreparedStatement stmt = conn.prepareStatement(String.format("SELECT p.id, %s FROM pessoa p ORDER BY %s %s LIMIT ?, ?", Util.formatarColunas(COLUNAS_TABELA, "p"), "p." + coluna, ordem));
         ) {
             stmt.setLong(1, offset);
             stmt.setLong(2, limit);
@@ -104,7 +101,7 @@ public class PessoaDAO {
     public static List<Pessoa> list(long limit, long offset) throws SQLException {
         try (
             java.sql.Connection conn = Connection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("SELECT p.id, " + Util.formatarColunas(colunasTabela, "p") + " FROM pessoa p LIMIT ?, ?");
+            PreparedStatement stmt = conn.prepareStatement("SELECT p.id, " + Util.formatarColunas(COLUNAS_TABELA, "p") + " FROM pessoa p LIMIT ?, ?");
         ) {
             stmt.setLong(1, offset);
             stmt.setLong(2, limit);
@@ -115,7 +112,7 @@ public class PessoaDAO {
     public static List<Pessoa> find(String q, long limit, long offset) throws SQLException {
         try (
             java.sql.Connection conn = Connection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("SELECT DISTINCT(p.id) as cd, p.id, " + Util.formatarColunas(colunasTabela, "p") + " FROM pessoa p WHERE " + Util.buildQuery(q, "pessoa", new String[]{"nome", "datanascimento", "cpf"}) + " LIMIT ?, ?");
+            PreparedStatement stmt = conn.prepareStatement("SELECT DISTINCT(p.id) as cd, p.id, " + Util.formatarColunas(COLUNAS_TABELA, "p") + " FROM pessoa p WHERE " + Util.buildQuery(q, "pessoa", new String[]{"nome", "datanascimento", "cpf"}) + " LIMIT ?, ?");
         ) {
             int index = 1;
             stmt.setString(index, "%" + q + "%");
@@ -134,6 +131,8 @@ public class PessoaDAO {
             stmt.setLong(index, offset);
             index++;
             stmt.setLong(index, limit);
+            
+            System.out.println(stmt);
             
             return getPessoas(stmt);
         }

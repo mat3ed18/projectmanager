@@ -5,8 +5,11 @@ import com.projectmanager.database.postgresql.dao.ProjetoDAO;
 import com.projectmanager.model.Pessoa;
 import com.projectmanager.model.Projeto;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
+@Service("ProjectManager")
 public class ProjectManagerService {
     
     public long create(Pessoa pessoa) throws SQLException {
@@ -51,6 +54,22 @@ public class ProjectManagerService {
     
     public Projeto getProjeto(String id) throws SQLException {
         return ProjetoDAO.get(Long.getLong(id));
+    }
+    
+    public int associate(Projeto projeto, Pessoa pessoa) {
+        return 0;
+    }
+    
+    public int disassociate(Projeto projeto, Pessoa pessoa) {
+        return 0;
+    }
+    
+    public List<Pessoa> getMembers(long page, long limit) {
+        return new ArrayList();
+    }
+    
+    public List<Pessoa> findMembers(String q, long page, long limit) {
+        return new ArrayList();
     }
     
     public List<Projeto> getProjetos(long page, long limit) throws SQLException {
