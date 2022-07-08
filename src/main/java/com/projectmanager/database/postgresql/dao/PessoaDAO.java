@@ -71,6 +71,25 @@ public class PessoaDAO {
         }
     }
     
+    /**
+    * Retorna o objeto da pessoa encontrada através de seu CPF
+    *
+    * @param pessoa Objeto da pessoa criada
+    * @return o objeto do tipo Pessoa
+    */
+    
+    public static Pessoa get(Pessoa pessoa) throws SQLException {
+        try (
+            java.sql.Connection conn = Connection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement("SELECT p.id, " + Util.formatarColunas(colunasTabela, "p") + " FROM pessoa p WHERE p.cpf = ?");
+        ) {
+            stmt.setString(1, pessoa.getCpf());
+            return getPessoa(stmt);
+        }
+    }
+    
+    
+    
     public static List<Pessoa> list(String coluna, String ordem, long limit, long offset) throws SQLException {
         try (
             java.sql.Connection conn = Connection.getConnection();

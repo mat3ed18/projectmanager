@@ -9,16 +9,18 @@ import java.util.List;
 
 public class ProjectManagerService {
     
-    public int create(Pessoa pessoa) {
-        return 0;
+    public long create(Pessoa pessoa) throws SQLException {
+        Pessoa p = PessoaDAO.get(pessoa);
+        if (p == null) return PessoaDAO.insert(pessoa);
+        else return 0;
     }
     
-    public int update(Pessoa pessoa) {
-        return 0;
+    public int update(Pessoa pessoa) throws SQLException {
+        return PessoaDAO.update(pessoa);
     }
     
-    public boolean delete(Pessoa pessoa) {
-        return true;
+    public int delete(Pessoa pessoa) throws SQLException {
+        return PessoaDAO.delete(pessoa);
     }
     
     public Pessoa getPessoa(String id) throws SQLException {
@@ -35,16 +37,16 @@ public class ProjectManagerService {
         return PessoaDAO.find(q, limit, offset);
     }
     
-    public int create(Projeto projeto) {
-        return 0;
+    public long create(Projeto projeto) throws SQLException {
+        return ProjetoDAO.insert(projeto);
     }
     
-    public int update(Projeto projeto) {
-        return 0;
+    public int update(Projeto projeto) throws SQLException {
+        return ProjetoDAO.update(projeto);
     }
     
-    public boolean delete(Projeto projeto) {
-        return true;
+    public int delete(Projeto projeto) throws SQLException {
+        return ProjetoDAO.delete(projeto);
     }
     
     public Projeto getProjeto(String id) throws SQLException {
