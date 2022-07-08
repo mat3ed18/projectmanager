@@ -4,7 +4,7 @@ import com.projectmanager.database.postgresql.dao.PessoaDAO;
 import com.projectmanager.database.postgresql.dao.ProjetoDAO;
 import com.projectmanager.model.Pessoa;
 import com.projectmanager.model.Projeto;
-import java.math.BigInteger;
+import java.sql.SQLException;
 import java.util.List;
 
 public class ProjectManagerService {
@@ -21,17 +21,17 @@ public class ProjectManagerService {
         return true;
     }
     
-    public Pessoa getPessoa(String id) {
-        return PessoaDAO.get(new BigInteger(id));
+    public Pessoa getPessoa(String id) throws SQLException {
+        return PessoaDAO.get(Long.parseLong(id));
     }
     
-    public List<Pessoa> getPessoas(int page, int limit) {
-        int offset = (page - 1) * limit;
+    public List<Pessoa> getPessoas(long page, long limit) throws SQLException {
+        long offset = (page - 1) * limit;
         return PessoaDAO.list(limit, offset);
     }
     
-    public List<Pessoa> buscarPessoas(String q, int page, int limit) {
-        int offset = (page - 1) * limit;
+    public List<Pessoa> buscarPessoas(String q, long page, long limit) throws SQLException {
+        long offset = (page - 1) * limit;
         return PessoaDAO.find(q, limit, offset);
     }
     
@@ -47,17 +47,17 @@ public class ProjectManagerService {
         return true;
     }
     
-    public Projeto getProjeto(String id) {
-        return ProjetoDAO.get(new BigInteger(id));
+    public Projeto getProjeto(String id) throws SQLException {
+        return ProjetoDAO.get(Long.getLong(id));
     }
     
-    public List<Projeto> getProjetos(int page, int limit) {
-        int offset = (page - 1) * limit;
+    public List<Projeto> getProjetos(long page, long limit) throws SQLException {
+        long offset = (page - 1) * limit;
         return ProjetoDAO.list(limit, offset);
     }
     
-    public List<Projeto> buscarProjetos(String q, int page, int limit) {
-        int offset = (page - 1) * limit;
+    public List<Projeto> buscarProjetos(String q, long page, long limit) throws SQLException {
+        long offset = (page - 1) * limit;
         return ProjetoDAO.find(q, limit, offset);
     }
 }
