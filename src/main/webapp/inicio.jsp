@@ -14,6 +14,17 @@
                     %><i><%= nomes[i] %></i><br><%
                 } 
             %>
+            
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+            <script>
+                $(document).ajaxError(function (e, jqXHR, settings, exception) {
+                    console.log(jqXHR);
+                });
+                
+                $.get("http://localhost:8080/projectmanager/pessoa", {id: 1}, function (data) {
+                    console.log(data);
+                }, "json");
+            </script>
         </body>
     </html>
 </f:view>

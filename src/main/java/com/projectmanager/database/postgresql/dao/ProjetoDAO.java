@@ -1,16 +1,19 @@
 package com.projectmanager.database.postgresql.dao;
 
-import com.projectmanager.database.postgresql.Connection;
+import com.projectmanager.config.Config;
 import com.projectmanager.model.Pessoa;
 import com.projectmanager.model.Projeto;
 import com.projectmanager.util.Util;
 import java.sql.Date;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import lombok.Cleanup;
 
 public class ProjetoDAO {
@@ -19,7 +22,7 @@ public class ProjetoDAO {
     
     public static long insert(Projeto projeto) throws SQLException {
         try (
-            java.sql.Connection conn = Connection.getConnection();
+            java.sql.Connection conn = DriverManager.getConnection(Config.URL);
             PreparedStatement stmt = conn.prepareStatement("INSERT INTO projeto (" + COLUNAS_TABELA + ") VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
         ) {
             stmt.setString(1, projeto.getNome());
@@ -41,7 +44,7 @@ public class ProjetoDAO {
     
     public static int update(Projeto projeto) throws SQLException {
         try (
-            java.sql.Connection conn = Connection.getConnection();
+            java.sql.Connection conn = DriverManager.getConnection(Config.URL);
             PreparedStatement stmt = conn.prepareStatement("UPDATE projeto p SET " + COLUNAS_UPDATE + " WHERE p.id = ?");
         ) {
             stmt.setString(1, projeto.getNome());
@@ -60,7 +63,7 @@ public class ProjetoDAO {
     
     public static int delete(Projeto projeto) throws SQLException {
         try (
-            java.sql.Connection conn = Connection.getConnection();
+            java.sql.Connection conn = DriverManager.getConnection(Config.URL);
             PreparedStatement stmt = conn.prepareStatement("DELETE FROM projeto WHERE id = ?");
         ) {
             stmt.setLong(1, projeto.getId());
@@ -70,7 +73,7 @@ public class ProjetoDAO {
     
     public static Projeto get(long id) throws SQLException {
         try (
-            java.sql.Connection conn = Connection.getConnection();
+            java.sql.Connection conn = DriverManager.getConnection(Config.URL);
             PreparedStatement stmt = conn.prepareStatement("SELECT p.id, " + Util.formatarColunas(COLUNAS_TABELA, "p") + " FROM projeto p WHERE p.id = ?");
         ) {
             stmt.setLong(1, id);
@@ -80,30 +83,20 @@ public class ProjetoDAO {
     
     public static List<Projeto> list(String coluna, String ordem, long limit, long offset) throws SQLException {
         try (
-            java.sql.Connection conn = Connection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(String.format("SELECT p.id, %s FROM projeto p ORDER BY %s %s LIMIT ?, ?", Util.formatarColunas(COLUNAS_TABELA, "p"), "p" + coluna, ordem));
+            java.sql.Connection conn = DriverManager.getConnection(Config.URL);
+            PreparedStatement stmt = conn.prepareStatement(String.format("SELECT p.id, %s FROM projeto p ORDER BY p.%s %s LIMIT ? OFFSET ?", Util.formatarColunas(COLUNAS_TABELA, "p"), coluna, ordem));
         ) {
-            stmt.setLong(1, offset);
-            stmt.setLong(2, limit);
+            stmt.setLong(1, limit);
+            stmt.setLong(2, offset);
+            
             return getProjetos(stmt);
         }
     }
     
-    public static List<Projeto> list(long limit, long offset) throws SQLException {
+    public static List<Projeto> find(String q, String coluna, String ordem, long limit, long offset) throws SQLException {
         try (
-            java.sql.Connection conn = Connection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("SELECT p.id, " + Util.formatarColunas(COLUNAS_TABELA, "p") + " FROM projeto p LIMIT ?, ?");
-        ) {
-            stmt.setLong(1, offset);
-            stmt.setLong(2, limit);
-            return getProjetos(stmt);
-        }
-    }
-    
-    public static List<Projeto> find(String q, long limit, long offset) throws SQLException {
-        try (
-            java.sql.Connection conn = Connection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("SELECT p.id, " + Util.formatarColunas(COLUNAS_TABELA, "p") + " FROM projeto p WHERE " + Util.buildQuery(q, "projeto", new String[]{"nome", "descricao", "orcamento", "data_inicio", "data_previsao_fim", "data_fim"}) + " LIMIT ?, ?");
+            java.sql.Connection conn = DriverManager.getConnection(Config.URL);
+            PreparedStatement stmt = conn.prepareStatement(String.format("SELECT p.id, %s FROM projeto p WHERE %s ORDER BY p.%s %s LIMIT ? OFFSET ?", Util.formatarColunas(COLUNAS_TABELA, "p"), Util.buildQuery(q, "projeto", new String[]{"nome", "descricao", "orcamento", "data_inicio", "data_previsao_fim", "data_fim"}), coluna, ordem));
         ) {
             int index = 1;
             stmt.setString(index, "%" + q + "%");
@@ -122,28 +115,230 @@ public class ProjetoDAO {
             }
             
             index++;
-            stmt.setLong(index, offset);
-            index++;
             stmt.setLong(index, limit);
+            index++;
+            stmt.setLong(index, offset);
             
             return getProjetos(stmt);
         }
     }
     
-    public static int adicionarMembro(Projeto projeto, Pessoa pessoa) {
+    public static long adicionarMembro(long projetoId, long pessoaId) throws SQLException {
+        try (
+            java.sql.Connection conn = DriverManager.getConnection(Config.URL);
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO membros (idprojeto, idpessoa) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+        ) {
+            stmt.setLong(1, projetoId);
+            stmt.setLong(2, pessoaId);
+            
+            stmt.executeUpdate();
+            
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) return generatedKeys.getLong(1);
+            }
+        }
         return 0;
     }
     
-    public static int removerMembro(Projeto projeto, Pessoa pessoa) {
-        return 0;
+    public static int removerMembro(long projetoId, long pessoaId) throws SQLException {
+        try (
+            java.sql.Connection conn = DriverManager.getConnection(Config.URL);
+            PreparedStatement stmt = conn.prepareStatement("DELETE FROM membros WHERE idprojeto = ? AND idpessoa = ?");
+        ) {
+            stmt.setLong(1, projetoId);
+            stmt.setLong(2, pessoaId);
+            return stmt.executeUpdate();
+        }
     }
     
-    public static List<Pessoa> listarMembros(long limit, long offset) {
-        return new ArrayList();
+    public static int removerTodos(Projeto projeto) throws SQLException {
+        try (
+            java.sql.Connection conn = DriverManager.getConnection(Config.URL);
+            PreparedStatement stmt = conn.prepareStatement("DELETE FROM membros WHERE idprojeto = ?");
+        ) {
+            stmt.setLong(1, projeto.getId());
+            return stmt.executeUpdate();
+        }
     }
     
-    public static List<Projeto> findMembros(String q, long limit, long offset) {
-        return new ArrayList();
+    public static int removerTodos(Pessoa pessoa) throws SQLException {
+        try (
+            java.sql.Connection conn = DriverManager.getConnection(Config.URL);
+            PreparedStatement stmt = conn.prepareStatement("DELETE FROM membros WHERE idpessoa = ?");
+        ) {
+            stmt.setLong(2, pessoa.getId());
+            return stmt.executeUpdate();
+        }
+    }
+    
+    public static List<Pessoa> listarMembros(Projeto projeto, String coluna, String ordem, long limit, long offset) throws SQLException {
+        try (
+            java.sql.Connection conn = DriverManager.getConnection(Config.URL);
+            PreparedStatement stmt = conn.prepareStatement(String.format("SELECT ps.* FROM pessoa ps, projeto pr, membros m WHERE %s ORDER BY ps.%s %s LIMIT ? OFFSET ?", Util.formatarWhere(new ArrayList<Map<String, Object>>(){{
+                add(new HashMap<String, Object>(){{
+                    put("column", "m.idpessoa");
+                    put("value", "ps.id");
+                    put("relation", true);
+                }});
+                add(new HashMap<String, Object>(){{
+                    put("column", "m.idprojeto");
+                    put("value", "pr.id");
+                    put("relation", true);
+                }});
+                add(new HashMap<String, Object>(){{
+                    put("column", "pr.id");
+                    put("value", "?");
+                    put("statement", true);
+                }});
+            }}), coluna, ordem));
+        ) {
+            stmt.setLong(1, projeto.getId());
+            stmt.setLong(2, limit);
+            stmt.setLong(3, offset);
+            
+            return PessoaDAO.getPessoas(stmt);
+        }
+    }
+    
+    public static int get(long projetoId, long pessoaId) throws SQLException {
+        try (
+            java.sql.Connection conn = DriverManager.getConnection(Config.URL);
+            PreparedStatement stmt = conn.prepareStatement(String.format("SELECT m.* FROM membros m WHERE %s", Util.formatarWhere(new ArrayList<Map<String, Object>>(){{
+                add(new HashMap<String, Object>(){{
+                    put("column", "m.idpessoa");
+                    put("value", "?");
+                    put("statement", true);
+                }});
+                add(new HashMap<String, Object>(){{
+                    put("column", "m.idprojeto");
+                    put("value", "?");
+                    put("statement", true);
+                }});
+                
+            }})));
+        ) {
+            stmt.setLong(1, projetoId);
+            stmt.setLong(2, pessoaId);
+            
+            @Cleanup ResultSet rs = stmt.executeQuery();
+            rs.next();
+            System.out.println(Util.countQuery(stmt));
+            return rs.getRow();
+        }
+    }
+    
+    public static List<Projeto> listarProjetos(Pessoa pessoa, String coluna, String ordem, long limit, long offset) throws SQLException {
+        try (
+            java.sql.Connection conn = DriverManager.getConnection(Config.URL);
+            PreparedStatement stmt = conn.prepareStatement(String.format("SELECT pr.* FROM pessoa ps, projeto pr, membros m WHERE %s ORDER BY ps.%s %s LIMIT ? OFFSET ?", Util.formatarWhere(new ArrayList<Map<String, Object>>(){{
+                add(new HashMap<String, Object>(){{
+                    put("column", "m.idpessoa");
+                    put("value", "ps.id");
+                    put("relation", true);
+                }});
+                add(new HashMap<String, Object>(){{
+                    put("column", "m.idprojeto");
+                    put("value", "pr.id");
+                    put("relation", true);
+                }});
+                add(new HashMap<String, Object>(){{
+                    put("column", "ps.id");
+                    put("value", "?");
+                    put("statement", true);
+                }});
+            }}), coluna, ordem));
+        ) {
+            stmt.setLong(1, pessoa.getId());
+            stmt.setLong(2, limit);
+            stmt.setLong(3, offset);
+            
+            return getProjetos(stmt);
+        }
+    }
+    
+    public static List<Pessoa> buscarMembros(String q, Projeto projeto, String coluna, String ordem, long limit, long offset) throws SQLException {
+        try (
+            java.sql.Connection conn = DriverManager.getConnection(Config.URL);
+            PreparedStatement stmt = conn.prepareStatement(String.format("SELECT ps.* FROM pessoa ps, projeto pr, membros m WHERE %s AND %s ORDER BY ps.%s %s LIMIT ? OFFSET ?", Util.formatarWhere(new ArrayList<Map<String, Object>>(){{
+                add(new HashMap<String, Object>(){{
+                    put("column", "m.idpessoa");
+                    put("value", "ps.id");
+                    put("relation", true);
+                }});
+                add(new HashMap<String, Object>(){{
+                    put("column", "m.idprojeto");
+                    put("value", "pr.id");
+                    put("relation", true);
+                }});
+                add(new HashMap<String, Object>(){{
+                    put("column", "pr.id");
+                    put("value", "?");
+                    put("statement", true);
+                }});
+            }}), Util.buildQuery(q, "pessoa", new String[]{"nome", "datanascimento", "cpf"}), coluna, ordem));
+        ) {
+            int index = 1;
+            stmt.setLong(index, projeto.getId());
+            
+            if (Util.isDate(q)) { // para a data de nascimento
+                index++;
+                stmt.setString(index, "%" + q + "%");
+            }
+            
+            if (Util.isCpf(q)) { // para o cpf
+                index++;
+                stmt.setString(index, "%" + q + "%");
+            }
+            
+            index++;
+            stmt.setLong(index, limit);
+            index++;
+            stmt.setLong(index, offset);
+            
+            return PessoaDAO.getPessoas(stmt);
+        }
+    }
+    
+    public static List<Projeto> buscarProjetos(String q, Pessoa pessoa, String coluna, String ordem, long limit, long offset) throws SQLException {
+        try (
+            java.sql.Connection conn = DriverManager.getConnection(Config.URL);
+            PreparedStatement stmt = conn.prepareStatement(String.format("SELECT pr.* FROM pessoa ps, projeto pr, membros m WHERE %s AND %s ORDER BY ps.%s %s LIMIT ? OFFSET ?", Util.formatarWhere(new ArrayList<Map<String, Object>>(){{
+                add(new HashMap<String, Object>(){{
+                    put("column", "m.idpessoa");
+                    put("value", "ps.id");
+                    put("relation", true);
+                }});
+                add(new HashMap<String, Object>(){{
+                    put("column", "m.idprojeto");
+                    put("value", "pr.id");
+                    put("relation", true);
+                }});
+                add(new HashMap<String, Object>(){{
+                    put("column", "ps.id");
+                    put("value", "?");
+                    put("statement", true);
+                }});
+            }}), Util.buildQuery(q, "projeto", new String[]{"nome", "descricao", "orcamento", "data_inicio", "data_previsao_fim", "data_fim"}), coluna, ordem));
+        ) {
+            int index = 1;
+            stmt.setLong(index, pessoa.getId());
+            
+            if (Util.isDate(q)) { // para as datas
+                index++;
+                stmt.setString(index, "%" + q + "%");
+                index++;
+                stmt.setString(index, "%" + q + "%");
+                index++;
+                stmt.setString(index, "%" + q + "%");
+            }
+            
+            index++;
+            stmt.setLong(index, limit);
+            index++;
+            stmt.setLong(index, offset);
+            
+            return getProjetos(stmt);
+        }
     }
     
     private static Projeto getProjeto(PreparedStatement stmt) throws SQLException {
@@ -160,6 +355,7 @@ public class ProjetoDAO {
         while (rs.next()) {
             projetos.add(Projeto.parse(rs));
         }
+        Config.ROWS = Util.countQuery(stmt);
         return projetos;
     }
 }

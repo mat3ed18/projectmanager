@@ -45,13 +45,13 @@ public class JSON {
 
     // Generic Type Safe Method – convert JSON into Object
     
-    public static <T> T covertFromJsonToObject(String json, Class<T> var) throws IOException {
+    public static <T> T convertFromJsonToObject(String json, Class<T> var) throws IOException {
         return objectMapper.readValue(json, var);//Convert Json into object of Specific Type
     }
 
     // convert Object into JSON
     
-    public static String covertFromObjectToJson(Object obj) throws JsonProcessingException {
+    public static String convertFromObjectToJson(Object obj) throws JsonProcessingException {
         return objectMapper.writeValueAsString(obj);
     }
 }
