@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.projectmanager.config.Config;
+import com.projectmanager.controller.ProjectManagerController;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,6 +28,11 @@ import org.springframework.http.HttpStatus;
 
 public class Util {
     public static void main(String[] args) {
+        ProjectManagerController controller = new ProjectManagerController();
+        
+        System.out.println(controller.getPessoa(new HashMap<String, String>() {{
+            put("id", "1");
+        }}));
     }
     
     public static ArrayList<String> getKeys(ObjectNode json) {
