@@ -19,14 +19,14 @@ public class JSON {
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
     }
 
-    // convert JSON into List of Objects
+    // converte JSON em Lista de Objetos
     
     public static <T> List<T> convertFromJsonToList(String json, TypeReference<List<T>> var) throws JsonParseException, JsonMappingException, IOException {
         return objectMapper.readValue(json, var);
     }
     
     /*
-        convert JSON into List of Objects
+        converter JSON em lista de objetos
         exemplo: List<Pessoa> list = JSONUtils.convertFromJsonToList(response.getBody(), new TypeReference<List<Pessoa>>() {
         });
     */
@@ -36,20 +36,20 @@ public class JSON {
         });
     }
 
-    // convert JSON into List of Objects
+    // converte JSON em Lista de Objetos
     
     public static <T> HashMap<T, Object> convertFromJsonToMap(String json) throws JsonParseException, JsonMappingException, IOException {
         TypeReference<HashMap<T,Object>> typeRef = new TypeReference<HashMap<T,Object>>() {};
         return objectMapper.readValue(json, typeRef);
     }
 
-    // Generic Type Safe Method – convert JSON into Object
+    // Método seguro de tipo genérico – converte JSON em objeto
     
     public static <T> T convertFromJsonToObject(String json, Class<T> var) throws IOException {
-        return objectMapper.readValue(json, var);//Convert Json into object of Specific Type
+        return objectMapper.readValue(json, var); // Converter JSON em objeto de tipo específico
     }
 
-    // convert Object into JSON
+    // converte o objeto em JSON
     
     public static String convertFromObjectToJson(Object obj) throws JsonProcessingException {
         return objectMapper.writeValueAsString(obj);

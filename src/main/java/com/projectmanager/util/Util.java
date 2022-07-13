@@ -1,5 +1,6 @@
 package com.projectmanager.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -16,15 +17,16 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import org.springframework.http.HttpStatus;
 
 public class Util {
-    
-    public static void main(String[] args) throws SQLException {
-        
+    public static void main(String[] args) {
     }
     
     public static ArrayList<String> getKeys(ObjectNode json) {
@@ -39,15 +41,34 @@ public class Util {
         return keys;
     }
     
-    public static ObjectNode formatSQLException(SQLException ex) {
+    public static ObjectNode formatException(Exception ex) {
         ObjectNode json = new ObjectMapper().createObjectNode();
         
-        json.put("code", ex.getErrorCode());
-        json.put("location", ex.getLocalizedMessage());
-        json.put("message", ex.getMessage());
-        json.put("state", ex.getSQLState());
-        
-        ex.printStackTrace();
+        switch (ex) {
+            case SQLException sqlEx -> {
+                json.put("code", sqlEx.getErrorCode());
+                json.put("location", sqlEx.getLocalizedMessage());
+                json.put("message", sqlEx.getMessage());
+                json.put("state", sqlEx.getSQLState());
+            }
+            case JsonProcessingException jsonEx -> {
+                json.put("code", jsonEx.hashCode());
+                json.put("location", jsonEx.getLocalizedMessage());
+                json.put("message", jsonEx.getMessage());
+            }
+            case NullPointerException jsonNull -> {
+                json.put("code", jsonNull.hashCode());
+                json.put("location", jsonNull.getLocalizedMessage());
+                if (jsonNull.getMessage().indexOf("\"com.projectmanager.model.Projeto.getId()\" because \"projeto\" is null") >= 0) json.put("message", "O projeto não foi encontrado");
+                else if (jsonNull.getMessage().indexOf("\"com.projectmanager.model.Pessoa.getId()\" because \"pessoa\" is null") >= 0) json.put("message", "O usuário não foi encontrado");
+                else json.put("message", jsonNull.getMessage());
+            }
+            default -> {
+                json.put("code", ex.hashCode());
+                json.put("location", ex.getLocalizedMessage());
+                json.put("message", ex.getMessage());
+            }
+        }
         
         return json;
     }
@@ -89,27 +110,71 @@ public class Util {
         switch (table) {
             case "pessoa":
                 for (int i = 0; i < columns.length; i++) {
-                    if (columns[i].equals("datanascimento")) fullQuery += (isDate(q)) ? "p.datanascimento LIKE ? OR " : "";
-                    else if (columns[i].equals("cpf")) fullQuery += (isCpf(q)) ? "p.cpf LIKE ? OR " : "";
-                    else fullQuery += "p." + columns[i] + " LIKE ?";
+                    switch (columns[i]) {
+                        case "datanascimento" -> {
+                            fullQuery += (isDate(q)) ? "TO_CHAR(p.datanascimento, 'dd/mm/yyyy') LIKE ?" : "";
+                            fullQuery += ((i < columns.length - 1 && isDate(q)) ? " OR " : "");
+                        }
+                        case "cpf" -> {
+                            fullQuery += (isCpf(q)) ? "p.cpf LIKE ?" : "";
+                            fullQuery += ((i < columns.length - 1 && isCpf(q)) ? " OR " : "");
+                        }
+                        default -> {
+                            fullQuery += "p." + columns[i] + " LIKE ?";
+                            fullQuery += ((i < columns.length - 1) ? " OR " : "");
+                        }
+                    }
                 }
             break;
             case "projeto":
                 for (int i = 0; i < columns.length; i++) {
-                    if (columns[i].equals("data_inicio")) fullQuery += (isDate(q)) ? "p.data_inicio LIKE ? OR " : "";
-                    else if (columns[i].equals("data_previsao_fim")) fullQuery += (isDate(q)) ? "p.data_previsao_fim LIKE ? OR " : "";
-                    else if (columns[i].equals("data_fim")) fullQuery += (isDate(q)) ? "p.data_fim LIKE ? OR " : "";
-                    else {
-                        fullQuery += "p." + columns[i] + " LIKE ?" + ((i < columns.length) ? " OR " : "");
+                    switch (columns[i]) {
+                        case "data_inicio" -> {
+                            fullQuery += (isDate(q)) ? "TO_CHAR(p.data_inicio, 'dd/mm/yyyy') LIKE ?" : "";
+                            fullQuery += ((i < columns.length - 1 && isDate(q)) ? " OR " : "");
+                        }
+                        case "data_previsao_fim" -> {
+                            fullQuery += (isDate(q)) ? "TO_CHAR(p.data_previsao_fim, 'dd/mm/yyyy') LIKE ?" : "";
+                            fullQuery += ((i < columns.length - 1 && isDate(q)) ? " OR " : "");
+                        }
+                        case "data_fim" -> {
+                            fullQuery += (isDate(q)) ? "TO_CHAR(p.data_fim, 'dd/mm/yyyy') LIKE ?" : "";
+                            fullQuery += ((i < columns.length - 1 && isDate(q)) ? " OR " : "");
+                        }
+                        case "orcamento" -> {
+                            fullQuery += "CAST(p.orcamento as text) LIKE ?";
+                            fullQuery += ((i < columns.length - 1) ? " OR " : "");
+                        }
+                        default -> {
+                            fullQuery += "p." + columns[i] + " LIKE ?";
+                            fullQuery += ((i < columns.length - 1) ? " OR " : "");
+                        }
                     }
                 }
             break;
             default:
                 fullQuery = "id LIKE ?"; // só pra não dar erro
             break;
-            
         }
-        return fullQuery;
+        
+        // removendo o último OR
+        
+        if (!isDate(q) && !isCpf(q)) {
+            int start = fullQuery.lastIndexOf(" OR ");
+            StringBuilder builder = new StringBuilder();
+            if (start > 0) {
+                builder.append(fullQuery.substring(0, start));
+                builder.append("");
+                builder.append(fullQuery.substring(start + " OR ".length()));
+                return builder.toString();
+            } else {
+                return fullQuery;
+            }
+        } else {
+            return fullQuery;
+        }
+        
+        
     }
     
     public static boolean isNumeric(String str) {
@@ -218,7 +283,6 @@ public class Util {
     
     public static long countQuery(PreparedStatement stmt) throws SQLException {
         String columns = stmt.toString().replaceAll(".*SELECT | FROM.*", "");
-        
         String query = stmt.toString().replace("SELECT " + columns + " FROM", "SELECT COUNT(*) AS qtd FROM");
         
         if (query.indexOf("ORDER BY") >= 0) {
@@ -239,4 +303,14 @@ public class Util {
         }
     }
     
+    public static String formatResponse(HttpStatus request, Map<String, String> data, List<?> response) throws JsonProcessingException {
+        Map<String, Object> json = new HashMap(){{
+            put("status", request.value());
+            put("request", data);
+            put("results", response);
+            put("total", Config.ROWS);
+            put("rows", response.size());
+        }};
+        return JSON.convertFromObjectToJson(json);
+    }
 }

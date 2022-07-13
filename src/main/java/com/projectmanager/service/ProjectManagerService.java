@@ -31,14 +31,14 @@ public class ProjectManagerService {
         return PessoaDAO.get(Long.parseLong(id));
     }
     
-    public List<Pessoa> getPessoas(String coluna, String ordem, long page, long limit) throws SQLException {
-        long offset = (page - 1) * limit;
-        return PessoaDAO.list(coluna, ordem, limit, offset);
+    public List<Pessoa> getPessoas(String coluna, String ordem, String page, String limit) throws SQLException {
+        long offset = (page != null && limit != null) ? (Long.parseLong(page) - 1) * Long.parseLong(limit) : 0;
+        return PessoaDAO.list((coluna != null) ? coluna : "id", (ordem != null) ? ordem : "ASC", (limit != null) ? Long.parseLong(limit) : 100, offset);
     }
     
-    public List<Pessoa> buscarPessoas(String q, String coluna, String ordem, long page, long limit) throws SQLException {
-        long offset = (page - 1) * limit;
-        return PessoaDAO.find(q, coluna, ordem, limit, offset);
+    public List<Pessoa> buscarPessoas(String q, String coluna, String ordem, String page, String limit) throws SQLException {
+        long offset = (page != null && limit != null) ? (Long.parseLong(page) - 1) * Long.parseLong(limit) : 0;
+        return PessoaDAO.find(q, (coluna != null) ? coluna : "id", (ordem != null) ? ordem : "ASC", (limit != null) ? Long.parseLong(limit) : 100, offset);
     }
     
     // Table: projectmanager.projeto
@@ -57,17 +57,17 @@ public class ProjectManagerService {
     }
     
     public Projeto getProjeto(String id) throws SQLException {
-        return ProjetoDAO.get(Long.getLong(id));
+        return ProjetoDAO.get(Long.parseLong(id));
     }
     
-    public List<Projeto> getProjetos(String coluna, String ordem, long page, long limit) throws SQLException {
-        long offset = (page - 1) * limit;
-        return ProjetoDAO.list(coluna, ordem, limit, offset);
+    public List<Projeto> getProjetos(String coluna, String ordem, String page, String limit) throws SQLException {
+        long offset = (page != null && limit != null) ? (Long.parseLong(page) - 1) * Long.parseLong(limit) : 0;
+        return ProjetoDAO.list((coluna != null) ? coluna : "id", (ordem != null) ? ordem : "ASC", (limit != null) ? Long.parseLong(limit) : 100, offset);
     }
     
-    public List<Projeto> buscarProjetos(String q, String coluna, String ordem, long page, long limit) throws SQLException {
-        long offset = (page - 1) * limit;
-        return ProjetoDAO.find(q, coluna, ordem, limit, offset);
+    public List<Projeto> buscarProjetos(String q, String coluna, String ordem, String page, String limit) throws SQLException {
+        long offset = (page != null && limit != null) ? (Long.parseLong(page) - 1) * Long.parseLong(limit) : 0;
+        return ProjetoDAO.find(q, (coluna != null) ? coluna : "id", (ordem != null) ? ordem : "ASC", (limit != null) ? Long.parseLong(limit) : 100, offset);
     }
     
     // Table: projectmanager.membros
@@ -80,23 +80,23 @@ public class ProjectManagerService {
         return ProjetoDAO.removerMembro(idProjeto, idPessoa);
     }
     
-    public List<Pessoa> getMembers(long projetoId, String coluna, String ordem, long page, long limit) throws SQLException {
-        long offset = (page - 1) * limit;
-        return ProjetoDAO.listarMembros(ProjetoDAO.get(projetoId), coluna, ordem, limit, offset);
+    public List<Pessoa> getMembers(String projetoId, String coluna, String ordem, String page, String limit) throws SQLException {
+        long offset = (page != null && limit != null) ? (Long.parseLong(page) - 1) * Long.parseLong(limit) : 0;
+        return ProjetoDAO.listarMembros(ProjetoDAO.get(Long.parseLong(projetoId)), (coluna != null) ? coluna : "id", (ordem != null) ? ordem : "ASC", (limit != null) ? Long.parseLong(limit) : 100, offset);
     }
     
-    public List<Projeto> getProjects(long pessoaId, String coluna, String ordem, long page, long limit) throws SQLException {
-        long offset = (page - 1) * limit;
-        return ProjetoDAO.listarProjetos(PessoaDAO.get(pessoaId), coluna, ordem, limit, offset);
+    public List<Projeto> getProjects(String pessoaId, String coluna, String ordem, String page, String limit) throws SQLException {
+        long offset = (page != null && limit != null) ? (Long.parseLong(page) - 1) * Long.parseLong(limit) : 0;
+        return ProjetoDAO.listarProjetos(PessoaDAO.get(Long.parseLong(pessoaId)), (coluna != null) ? coluna : "id", (ordem != null) ? ordem : "ASC", (limit != null) ? Long.parseLong(limit) : 100, offset);
     }
     
-    public List<Pessoa> findMembers(String q, long projetoId, String coluna, String ordem, long page, long limit) throws SQLException {
-        long offset = (page - 1) * limit;
-        return ProjetoDAO.buscarMembros(q, ProjetoDAO.get(projetoId), coluna, ordem, limit, offset);
+    public List<Pessoa> findMembers(String q, String projetoId, String coluna, String ordem, String page, String limit) throws SQLException {
+        long offset = (page != null && limit != null) ? (Long.parseLong(page) - 1) * Long.parseLong(limit) : 0;
+        return ProjetoDAO.buscarMembros(q, ProjetoDAO.get(Long.parseLong(projetoId)), (coluna != null) ? coluna : "id", (ordem != null) ? ordem : "ASC", (limit != null) ? Long.parseLong(limit) : 100, offset);
     }
     
-    public List<Projeto> findProjects(String q, long pessoaId, String coluna, String ordem, long page, long limit) throws SQLException {
-        long offset = (page - 1) * limit;
-        return ProjetoDAO.buscarProjetos(q, PessoaDAO.get(pessoaId), coluna, ordem, limit, offset);
+    public List<Projeto> findProjects(String q, String pessoaId, String coluna, String ordem, String page, String limit) throws SQLException {
+        long offset = (page != null && limit != null) ? (Long.parseLong(page) - 1) * Long.parseLong(limit) : 0;
+        return ProjetoDAO.buscarProjetos(q, PessoaDAO.get(Long.parseLong(pessoaId)), (coluna != null) ? coluna : "id", (ordem != null) ? ordem : "ASC", (limit != null) ? Long.parseLong(limit) : 100, offset);
     }
 }

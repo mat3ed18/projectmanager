@@ -90,11 +90,12 @@ public class PessoaDAO {
     public static List<Pessoa> list(String coluna, String ordem, long limit, long offset) throws SQLException {
         try (
             java.sql.Connection conn = DriverManager.getConnection(Config.URL);
-            PreparedStatement stmt = conn.prepareStatement(String.format("SELECT p.id, %s FROM pessoa p ORDER BY p.%s %s LIMIT ? OFFSET ?", Util.formatarColunas(COLUNAS_TABELA, "p"), "p." + coluna, ordem));
+            PreparedStatement stmt = conn.prepareStatement(String.format("SELECT p.id, %s FROM pessoa p ORDER BY p.%s %s LIMIT ? OFFSET ?", Util.formatarColunas(COLUNAS_TABELA, "p"), coluna, ordem));
         ) {
             stmt.setLong(1, limit);
             stmt.setLong(2, offset);
             Config.ROWS = Util.countQuery(stmt);
+            System.out.println(stmt);
             return getPessoas(stmt);
         }
     }
@@ -122,6 +123,7 @@ public class PessoaDAO {
             index++;
             stmt.setLong(index, offset);
             
+            Config.ROWS = Util.countQuery(stmt);
             return getPessoas(stmt);
         }
     }

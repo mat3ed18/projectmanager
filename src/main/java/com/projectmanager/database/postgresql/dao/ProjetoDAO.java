@@ -89,6 +89,7 @@ public class ProjetoDAO {
             stmt.setLong(1, limit);
             stmt.setLong(2, offset);
             
+            Config.ROWS = Util.countQuery(stmt);
             return getProjetos(stmt);
         }
     }
@@ -96,11 +97,9 @@ public class ProjetoDAO {
     public static List<Projeto> find(String q, String coluna, String ordem, long limit, long offset) throws SQLException {
         try (
             java.sql.Connection conn = DriverManager.getConnection(Config.URL);
-            PreparedStatement stmt = conn.prepareStatement(String.format("SELECT p.id, %s FROM projeto p WHERE %s ORDER BY p.%s %s LIMIT ? OFFSET ?", Util.formatarColunas(COLUNAS_TABELA, "p"), Util.buildQuery(q, "projeto", new String[]{"nome", "descricao", "orcamento", "data_inicio", "data_previsao_fim", "data_fim"}), coluna, ordem));
+            PreparedStatement stmt = conn.prepareStatement(String.format("SELECT p.id, %s FROM projeto p WHERE %s ORDER BY p.%s %s LIMIT ? OFFSET ?", Util.formatarColunas(COLUNAS_TABELA, "p"), Util.buildQuery(q, "projeto", new String[]{"nome", "descricao", "data_inicio", "data_previsao_fim", "data_fim"}), coluna, ordem));
         ) {
             int index = 1;
-            stmt.setString(index, "%" + q + "%");
-            index++;
             stmt.setString(index, "%" + q + "%");
             index++;
             stmt.setString(index, "%" + q + "%");
@@ -119,6 +118,7 @@ public class ProjetoDAO {
             index++;
             stmt.setLong(index, offset);
             
+            Config.ROWS = Util.countQuery(stmt);
             return getProjetos(stmt);
         }
     }
@@ -196,6 +196,7 @@ public class ProjetoDAO {
             stmt.setLong(2, limit);
             stmt.setLong(3, offset);
             
+            Config.ROWS = Util.countQuery(stmt);
             return PessoaDAO.getPessoas(stmt);
         }
     }
@@ -222,7 +223,7 @@ public class ProjetoDAO {
             
             @Cleanup ResultSet rs = stmt.executeQuery();
             rs.next();
-            System.out.println(Util.countQuery(stmt));
+            Util.countQuery(stmt);
             return rs.getRow();
         }
     }
@@ -252,6 +253,7 @@ public class ProjetoDAO {
             stmt.setLong(2, limit);
             stmt.setLong(3, offset);
             
+            Config.ROWS = Util.countQuery(stmt);
             return getProjetos(stmt);
         }
     }
@@ -275,10 +277,12 @@ public class ProjetoDAO {
                     put("value", "?");
                     put("statement", true);
                 }});
-            }}), Util.buildQuery(q, "pessoa", new String[]{"nome", "datanascimento", "cpf"}), coluna, ordem));
+            }}), Util.buildQuery(q, "pessoa", new String[]{"nome", "datanascimento", "cpf"}).replace("p.", "ps."), coluna, ordem));
         ) {
             int index = 1;
             stmt.setLong(index, projeto.getId());
+            index++;
+            stmt.setString(index, "%" + q + "%");
             
             if (Util.isDate(q)) { // para a data de nascimento
                 index++;
@@ -295,6 +299,7 @@ public class ProjetoDAO {
             index++;
             stmt.setLong(index, offset);
             
+            Config.ROWS = Util.countQuery(stmt);
             return PessoaDAO.getPessoas(stmt);
         }
     }
@@ -302,7 +307,7 @@ public class ProjetoDAO {
     public static List<Projeto> buscarProjetos(String q, Pessoa pessoa, String coluna, String ordem, long limit, long offset) throws SQLException {
         try (
             java.sql.Connection conn = DriverManager.getConnection(Config.URL);
-            PreparedStatement stmt = conn.prepareStatement(String.format("SELECT pr.* FROM pessoa ps, projeto pr, membros m WHERE %s AND %s ORDER BY ps.%s %s LIMIT ? OFFSET ?", Util.formatarWhere(new ArrayList<Map<String, Object>>(){{
+            PreparedStatement stmt = conn.prepareStatement(String.format("SELECT pr.* FROM pessoa ps, projeto pr, membros m WHERE %s AND %s ORDER BY pr.%s %s LIMIT ? OFFSET ?", Util.formatarWhere(new ArrayList<Map<String, Object>>(){{
                 add(new HashMap<String, Object>(){{
                     put("column", "m.idpessoa");
                     put("value", "ps.id");
@@ -318,10 +323,16 @@ public class ProjetoDAO {
                     put("value", "?");
                     put("statement", true);
                 }});
-            }}), Util.buildQuery(q, "projeto", new String[]{"nome", "descricao", "orcamento", "data_inicio", "data_previsao_fim", "data_fim"}), coluna, ordem));
+            }}), Util.buildQuery(q, "projeto", new String[]{"nome", "descricao", "orcamento", "data_inicio", "data_previsao_fim", "data_fim"}).replace("p.", "pr."), coluna, ordem));
         ) {
             int index = 1;
             stmt.setLong(index, pessoa.getId());
+            index++;
+            stmt.setString(index, "%" + q + "%");
+            index++;
+            stmt.setString(index, "%" + q + "%");
+            index++;
+            stmt.setString(index, "%" + q + "%");
             
             if (Util.isDate(q)) { // para as datas
                 index++;
@@ -337,6 +348,7 @@ public class ProjetoDAO {
             index++;
             stmt.setLong(index, offset);
             
+            Config.ROWS = Util.countQuery(stmt);
             return getProjetos(stmt);
         }
     }
