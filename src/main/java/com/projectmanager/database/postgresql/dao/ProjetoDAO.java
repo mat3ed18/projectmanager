@@ -17,7 +17,7 @@ import java.util.Map;
 import lombok.Cleanup;
 
 public class ProjetoDAO {
-    private static final String COLUNAS_TABELA = "nome, data_inicio, data_previsao_fim, data_fim, descricao, orcamento, idgerente"; // 9
+    private static final String COLUNAS_TABELA = "nome, data_inicio, data_previsao_fim, data_fim, descricao, orcamento, idgerente"; // 7
     private static final String COLUNAS_UPDATE = "p.nome = ?, p.data_inicio = ?, p.data_previsao_fim = ?, p.data_fim = ?, p.descricao = ?, p.status = ?, p.orcamento = ?, p.risco = ?, p.idgerente = ?"; // 9
     
     public static long insert(Projeto projeto) throws SQLException {
