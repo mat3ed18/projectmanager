@@ -5,7 +5,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.projectmanager.config.Config;
-import com.projectmanager.controller.ProjectManagerController;
+import com.projectmanager.model.Pessoa;
+import com.projectmanager.model.Projeto;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,15 +25,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Scanner;
 import org.springframework.http.HttpStatus;
 
 public class Util {
     public static void main(String[] args) {
-        ProjectManagerController controller = new ProjectManagerController();
-        
-        System.out.println(controller.getPessoa(new HashMap<String, String>() {{
-            put("id", "1");
-        }}));
+        System.out.println("amor");
     }
     
     public static ArrayList<String> getKeys(ObjectNode json) {
@@ -318,5 +316,23 @@ public class Util {
             put("rows", response.size());
         }};
         return JSON.convertFromObjectToJson(json);
+    }
+    
+    public static void cadastrarPessoa() {
+        Scanner sc = new Scanner(System.in);
+        Pessoa pessoa = new Pessoa();
+        System.out.println(" --- SEJA BEM VINDO AO GERENCIADOR DE PROJETOS --- ");
+        System.out.println("\t Enquanto não temos uma interface web definida, você pode adicionar seus registros aqui pelo console. \n\t Não tropeçe aqui, caso deixou algum campo em branco, é só rodar \n\t essa classe novamente e inserir os dados corretamente. Boa diversão!");
+        
+        
+    }
+    
+    public static void cadastrarProjeto() {
+        Scanner sc = new Scanner(System.in);
+        Projeto projeto = new Projeto();
+    }
+    
+    public static void adicionarMembro() {
+        
     }
 }
