@@ -23,7 +23,7 @@ public class ProjetoDAO {
     public static long insert(Projeto projeto) throws SQLException {
         try (
             java.sql.Connection conn = DriverManager.getConnection(Config.URL);
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO projeto (" + COLUNAS_TABELA + ") VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO projeto (" + COLUNAS_TABELA + ") VALUES (?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
         ) {
             stmt.setString(1, projeto.getNome());
             stmt.setDate(2, Date.valueOf(projeto.getDataInicio().toString()));

@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.projectmanager.config.Config;
+import com.projectmanager.database.postgresql.dao.PessoaDAO;
+import com.projectmanager.database.postgresql.dao.ProjetoDAO;
 import com.projectmanager.model.Pessoa;
 import com.projectmanager.model.Projeto;
 import java.sql.DriverManager;
@@ -13,9 +15,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -30,7 +34,7 @@ import org.springframework.http.HttpStatus;
 
 public class Util {
     public static void main(String[] args) {
-        System.out.println("amor");
+        adicionarMembro();
     }
     
     public static ArrayList<String> getKeys(ObjectNode json) {
@@ -48,30 +52,35 @@ public class Util {
     public static ObjectNode formatException(Exception ex) {
         ObjectNode json = new ObjectMapper().createObjectNode();
         
-        switch (ex) {
-            case SQLException sqlEx -> {
-                json.put("code", sqlEx.getErrorCode());
-                json.put("location", sqlEx.getLocalizedMessage());
-                json.put("message", sqlEx.getMessage());
-                json.put("state", sqlEx.getSQLState());
-            }
-            case JsonProcessingException jsonEx -> {
-                json.put("code", jsonEx.hashCode());
-                json.put("location", jsonEx.getLocalizedMessage());
-                json.put("message", jsonEx.getMessage());
-            }
-            case NullPointerException jsonNull -> {
-                json.put("code", jsonNull.hashCode());
-                json.put("location", jsonNull.getLocalizedMessage());
-                if (jsonNull.getMessage().indexOf("\"com.projectmanager.model.Projeto.getId()\" because \"projeto\" is null") >= 0) json.put("message", "O projeto não foi encontrado");
-                else if (jsonNull.getMessage().indexOf("\"com.projectmanager.model.Pessoa.getId()\" because \"pessoa\" is null") >= 0) json.put("message", "O usuário não foi encontrado");
-                else json.put("message", jsonNull.getMessage());
-            }
-            default -> {
-                json.put("code", ex.hashCode());
-                json.put("location", ex.getLocalizedMessage());
-                json.put("message", ex.getMessage());
-            }
+        if (ex instanceof SQLException) {
+            SQLException sqlEx = (SQLException) ex;
+            json.put("code", sqlEx.getErrorCode());
+            json.put("location", sqlEx.getLocalizedMessage());
+            json.put("message", sqlEx.getMessage());
+            json.put("state", sqlEx.getSQLState());
+            ex.printStackTrace();
+        } 
+        
+        else if (ex instanceof JsonProcessingException) {
+            JsonProcessingException jsonEx = (JsonProcessingException) ex;
+            json.put("code", jsonEx.hashCode());
+            json.put("location", jsonEx.getLocalizedMessage());
+            json.put("message", jsonEx.getMessage());
+        } 
+        
+        else if (ex instanceof NullPointerException) {
+            NullPointerException jsonNull = (NullPointerException) ex;
+            json.put("code", jsonNull.hashCode());
+            json.put("location", jsonNull.getLocalizedMessage());
+            if (jsonNull.getMessage().indexOf("\"com.projectmanager.model.Projeto.getId()\" because \"projeto\" is null") >= 0) json.put("message", "O projeto não foi encontrado");
+            else if (jsonNull.getMessage().indexOf("\"com.projectmanager.model.Pessoa.getId()\" because \"pessoa\" is null") >= 0) json.put("message", "O usuário não foi encontrado");
+            else json.put("message", jsonNull.getMessage());
+        } 
+        
+        else {
+            json.put("code", ex.hashCode());
+            json.put("location", ex.getLocalizedMessage());
+            json.put("message", ex.getMessage());
         }
         
         return json;
@@ -108,6 +117,31 @@ public class Util {
     public static String parseTel(long num) {
         return Long.toString(num).replaceFirst("(\\d{2})(\\d{4})(\\d{4})", "($1) $2-$3");
     }
+    
+    public static String parseDate(long date) {
+        return Long.toString(date).replaceFirst("(\\d{2})(\\d{2})(\\d{4})", "$1/$2/$3");
+    }
+    
+    public static String parseCpf(String cpf) {
+        return cpf.replaceFirst("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
+    }
+    
+    public static String parseCnpj(String cnpj) {
+        return cnpj.replaceFirst("(\\d{2})(\\d{3})(\\d{3})(\\d{4})(\\d{2})", "$1.$2.$3/$4-$5");
+    }
+    
+    public static String parseCel(String num) {
+        return num.replaceFirst("(\\d{2})(\\d{1})(\\d{4})(\\d{4})", "($1) $2$3-$4");
+    }
+    
+    public static String parseTel(String num) {
+        return num.replaceFirst("(\\d{2})(\\d{4})(\\d{4})", "($1) $2-$3");
+    }
+    
+    public static String parseDate(String date) {
+        return date.replaceFirst("(\\d{2})(\\d{2})(\\d{4})", "$1/$2/$3");
+    }
+    
     
     public static String buildQuery(String q, String table, String[] columns) {
         String fullQuery = "";
@@ -319,20 +353,70 @@ public class Util {
     }
     
     public static void cadastrarPessoa() {
-        Scanner sc = new Scanner(System.in);
-        Pessoa pessoa = new Pessoa();
-        System.out.println(" --- SEJA BEM VINDO AO GERENCIADOR DE PROJETOS --- ");
-        System.out.println("\t Enquanto não temos uma interface web definida, você pode adicionar seus registros aqui pelo console. \n\t Não tropeçe aqui, caso deixou algum campo em branco, é só rodar \n\t essa classe novamente e inserir os dados corretamente. Boa diversão!");
-        
-        
+        try {
+            Scanner sc = new Scanner(System.in, "ISO-8859-2");
+            Pessoa pessoa = new Pessoa();
+            System.out.println("Digite o nome do usuário: ");
+            pessoa.setNome(sc.nextLine());
+            System.out.println("Digite o CPF do usuário (apenas nº): ");
+            pessoa.setCpf(Util.parseCpf(sc.nextLine()));
+            System.out.println("Digite a data de nascimento do usuário (apenas nº):");
+            pessoa.setDataNascimento(LocalDate.parse(Util.parseDate(sc.nextLine()), DateTimeFormatter.ofPattern("dd'/'MM'/'yyyy")));
+            System.out.println("Ele é um funcionário ? 1-Sim e 0-Não");
+            pessoa.setFuncionario((sc.nextInt() == 1));
+            
+            long id = PessoaDAO.insert(pessoa);
+            
+            System.out.println("ID do usuário cadastrado: " + id);
+            System.out.println((id > 0) ? "Parabéns! O usuário foi cadastrado com sucesso!" : "Houve um erro aí! iiiiiiiiiih");
+        } catch (SQLException ex) {
+            System.out.println(Util.formatException(ex));
+        }
     }
     
     public static void cadastrarProjeto() {
-        Scanner sc = new Scanner(System.in);
-        Projeto projeto = new Projeto();
+        try {
+            Scanner sc = new Scanner(System.in, "ISO-8859-2");
+            Projeto projeto = new Projeto();
+            System.out.println("Digite o nome do projeto: ");
+            projeto.setNome(sc.nextLine());
+            System.out.println("Digite a data de início do projeto (apenas nº):");
+            projeto.setDataInicio(LocalDate.parse(Util.parseDate(sc.nextLine()), DateTimeFormatter.ofPattern("dd'/'MM'/'yyyy")));
+            System.out.println("Digite a data de previsão do fim do projeto (apenas nº):");
+            projeto.setDataPrevisaoFim(LocalDate.parse(Util.parseDate(sc.nextLine()), DateTimeFormatter.ofPattern("dd'/'MM'/'yyyy")));
+            System.out.println("Digite a data final do projeto (apenas nº):");
+            projeto.setDataFim(LocalDate.parse(Util.parseDate(sc.nextLine()), DateTimeFormatter.ofPattern("dd'/'MM'/'yyyy")));
+            System.out.println("Digite a descrição do projeto: ");
+            projeto.setDescricao(sc.nextLine());
+            System.out.println("Digite o valor do orçamento do projeto: ");
+            projeto.setOrcamento(sc.nextFloat());
+            System.out.println("Digite o ID do gerente responsável pelo projeto: ");
+            projeto.setGerente(PessoaDAO.get(sc.nextLong()));
+            
+            long id = ProjetoDAO.insert(projeto);
+            
+            System.out.println("ID do projeto cadastrado: " + id);
+            System.out.println((id > 0) ? "Parabéns! O projeto foi cadastrado com sucesso!" : "Houve um erro aí! iiiiiiiiiih");
+        } catch (SQLException ex) {
+            System.out.println(Util.formatException(ex));
+        }
     }
     
     public static void adicionarMembro() {
-        
+        try {
+            Scanner sc = new Scanner(System.in, "ISO-8859-2");
+            
+            System.out.println("Digite o ID do projeto:");
+            long projetoId = sc.nextLong();
+            System.out.println("Digite o ID do membro:");
+            long pessoaId = sc.nextLong();
+            
+            long id = ProjetoDAO.adicionarMembro(projetoId, pessoaId);
+            
+            System.out.println("ID da associação: " + id);
+            System.out.println((id > 0) ? "Parabéns! O membro foi adicionado com sucesso!" : "Houve um erro aí! iiiiiiiiiih");
+        } catch (SQLException ex) {
+            System.out.println(Util.formatException(ex));
+        }
     }
 }
