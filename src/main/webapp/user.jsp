@@ -4,14 +4,10 @@
 <% String BASE_URL = Util.getURL(request); %>
 
 <!DOCTYPE html>
-<f:view>
     <html lang="en">
         <head>
             <title>Usuário | Project Manager</title>
             <jsp:include page="structure/head.jsp"/>
-            <style>
-                
-            </style>
         </head>
         <body>
             <div class="splash">
@@ -24,9 +20,7 @@
                     <main class="content">
                         <div class="container-fluid">
                             <div class="header">
-                                <h1 class="header-title">
-                                    Mariana Silva
-                                </h1>
+                                <h1 class="header-title" id="nome"></h1>
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="dashboard-default.html">Project Manager</a></li>
@@ -39,38 +33,38 @@
                                 <div class="col-xxl-12">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h5 class="card-title mb-0">Mariana Silva</h5>
+                                            <h5 class="card-title mb-0" id="nome"></h5>
                                         </div>
                                         <div class="card-body">
                                             <div class="row g-0">
                                                 <div class="col-sm-2 col-xl-2 col-xxl-1 text-center">
-                                                    <img src="img/avatars/avatar-3.jpg" width="64" height="64" class="rounded-circle" alt="Angelica Ramos" />
+                                                    <img src="<%= BASE_URL %>/img/avatars/user.png" width="64" height="64" class="rounded-circle" />
                                                 </div>
                                                 <div class="col-sm-10 col-xl-10 col-xxl-11">
                                                     <table class="table table-lg table-responsive my-2 mt-0">
                                                         <tbody>
                                                             <tr>
                                                                 <th>Nome</th>
-                                                                <td>Mariana Silva</td>
+                                                                <td id="nome"></td>
                                                             </tr>
                                                             <tr>
                                                                 <th>CPF</th>
-                                                                <td>495.***.***-21</td>
+                                                                <td id="CPF"></td>
                                                             </tr>
                                                             <tr>
                                                                 <th>Data de Nascimento</th>
-                                                                <td>30 de maio de 2003</td>
+                                                                <td id="data_nascimento"></td>
                                                             </tr>
                                                             <tr>
                                                                 <th>Projetos</th>
                                                                 <td class="lh-lg">
-                                                                    <b>12.546</b> projetos <span class="badge bg-light-dark text-black ms-1">MEMBRO</span><br>
-                                                                    <b>678.546</b> projetos <span class="badge bg-dark-light ms-1 mt-1">GERENTE</span>
+                                                                    <b id="count_member"></b> projetos <span class="badge bg-light-dark text-black ms-1">MEMBRO</span><br>
+                                                                    <b id="count_manager"></b> projetos <span class="badge bg-dark-light ms-1 mt-1">GERENTE</span>
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <th>Funcionário</th>
-                                                                <td><span class="badge bg-success">ATIVO</span></td>
+                                                                <td><span class="badge bg-success lh-lg"></span></td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -96,6 +90,20 @@
                     });
                 });
             </script>
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    <% if (request.getAttribute("id") != null) { %>
+                        $.get("<%= BASE_URL %>/projectmanager/pessoa", {id: "<%= request.getAttribute("id") %>"}, function (data) {
+                            $("#nome, td#nome").html(data.nome);
+                            $("#CPF").html(data.cpf);
+                            $("#data_nascimento").html(data.dataNascimento);
+                            $("#count_member").html(23);
+                            $("#count_manager").html(24);
+                        });
+                    <% } else { %>
+                        window.location.href = "<%= BASE_URL %>/home";
+                    <% } %>
+                });
+            </script>
         </body>
     </html>
-</f:view>

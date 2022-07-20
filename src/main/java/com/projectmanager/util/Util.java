@@ -38,7 +38,8 @@ import org.springframework.http.HttpStatus;
 public class Util {
     
     public static void main(String[] args) {
-        fazerInsercoes();
+        
+//        fazerInsercoes();
     }
     
     public static ArrayList<String> getKeys(ObjectNode json) {

@@ -108,7 +108,7 @@
                                                         </div>
                                                         <div class="mb-3">
                                                             <label>data de nascimento</label>
-                                                            <input class="form-control mt-2" type="date" name="data_nascimento" placeholder="Digite sua data de nascimento" />
+                                                            <input class="form-control mt-2" type="date" name="dataNascimento" placeholder="Digite sua data de nascimento" />
                                                         </div>
                                                         <div class="mb-3">
                                                             <input id="customControlInline" type="checkbox" class="form-check-input" value="isFuncionario" name="isFuncionario" />
@@ -155,6 +155,20 @@
             </div>
             <jsp:include page="structure/scripts.jsp"/>
             <jsp:include page="structure/scripts-login.jsp"/>
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    <% if (request.getSession(false).getAttribute("user_id") != null) { %>
+                        $.get("<%= BASE_URL %>/projectmanager/pessoa", {id: "<%= request.getSession(false).getAttribute("user_id") %>"}, function (data) {
+                            $("input[name='nome']").val(data.nome);
+                            $("input[name='cpf']").val(data.cpf);
+                            $("input[name='dataNascimento']").val(data.dataNascimento);
+                            $("input[name='isFuncionario']").prop("checked", data.funcionario);
+                        });
+                    <% } else { %>
+                        window.location.href = "<%= BASE_URL %>/home";
+                    <% } %>
+                });
+            </script>
         </body>
     </html>
 </f:view>

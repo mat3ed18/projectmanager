@@ -1,14 +1,8 @@
 package com.projectmanager;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.projectmanager.controller.ProjectManagerController;
 import com.projectmanager.database.postgresql.dao.ProjetoDAO;
-import com.projectmanager.util.JSON;
 import jakarta.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -20,14 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 public class ViewResolver {
     
-    private ProjectManagerController controller;
-
-    public ViewResolver() {
-        this.controller = new ProjectManagerController();
-    }
-    
     public static void main(String[] args) throws SQLException {
-        System.out.println(ProjetoDAO.totalMembrosProjeto(1));
+        System.out.println(ProjetoDAO.totalMembrosProjeto(2));
 //        Map<String, String> data = new HashMap();
 //        data.put("id", "1");
 //        ProjectManagerController control = new ProjectManagerController();
@@ -68,48 +56,21 @@ public class ViewResolver {
     
     @RequestMapping("/project/{id}")
     public String project(@PathVariable String id, ModelMap modelMap) {
-        try {
-            Map<String, String> data = new HashMap();
-            data.put("id", id);
-            String json = controller.getProjeto(data).getBody().toString();
-            modelMap.addAttribute("projeto", JSON.convertFromJsonToMap(json));
-            modelMap.addAttribute("editar", false);
-        } catch (JsonMappingException ex) {
-            modelMap.addAttribute("error", ex.getMessage());
-        } catch (IOException ex) {
-            modelMap.addAttribute("error", ex.getMessage());
-        }
+        modelMap.put("id", id);
+        modelMap.addAttribute("editar", false);
         return "/project.jsp";
     }
     
     @RequestMapping("/project/{id}/edit")
     public String edit(@PathVariable String id, ModelMap modelMap, HttpServletRequest request) {
-        try {
-            Map<String, String> data = new HashMap();
-            data.put("id", id);
-            String json = controller.getProjeto(data).getBody().toString();
-            modelMap.addAttribute("usuario", JSON.convertFromJsonToMap(json));
-            modelMap.addAttribute("editar", true);
-        } catch (JsonMappingException ex) {
-            modelMap.addAttribute("error", ex.getMessage());
-        } catch (IOException ex) {
-            modelMap.addAttribute("error", ex.getMessage());
-        }
+        modelMap.put("id", id);
+        modelMap.addAttribute("editar", true);
         return "/add.jsp";
     }
     
     @RequestMapping("/user/{id}")
     public String user(@PathVariable String id, ModelMap modelMap) {
-        try {
-            Map<String, String> data = new HashMap();
-            data.put("id", id);
-            String json = controller.getPessoa(data).getBody().toString();
-            modelMap.addAttribute("usuario", JSON.convertFromJsonToMap(json));
-        } catch (JsonMappingException ex) {
-            modelMap.addAttribute("error", ex.getMessage());
-        } catch (IOException ex) {
-            modelMap.addAttribute("error", ex.getMessage());
-        }
+        modelMap.put("id", id);
         return "/user.jsp";
     }
     

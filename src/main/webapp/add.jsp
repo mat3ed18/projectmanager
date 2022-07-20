@@ -1,13 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="com.projectmanager.util.Util"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="java.util.Map"%>
 
-<% 
-    String BASE_URL = Util.getURL(request); 
-    boolean edit = (request.getAttribute("editar") != null) ? (boolean) request.getAttribute("editar") : false;
-    Map<String, String> projeto = (request.getAttribute("editar") != null) ? (HashMap) request.getAttribute("projeto") : null;
-%>
+<%  String BASE_URL = Util.getURL(request); %>
 
 <!DOCTYPE html>
 <f:view>
@@ -38,8 +32,8 @@
                                 </h1>
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="dashboard-default.html">Project Manager</a></li>
-                                        <li class="breadcrumb-item"><a href="#">Projeto</a></li>
+                                        <li class="breadcrumb-item"><a href="<%= BASE_URL %>/home">Project Manager</a></li>
+                                        <li class="breadcrumb-item"><a>Projeto</a></li>
                                         <li class="breadcrumb-item active" aria-current="page">Adicionar</li>
                                     </ol>
                                 </nav>
@@ -272,6 +266,9 @@
                         }
                     });
                 });
+            </script>
+            <script>
+                
             </script>
         </body>
     </html>

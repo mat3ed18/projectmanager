@@ -537,7 +537,7 @@
                     o.setTime(o.getTime() + 24 * e * 60 * 60 * 1e3), r = "; expires=" + o.toUTCString()
                 }
                 document.cookie = t + "=" + (n || "") + r + "; path=/"
-            }("theme", n, 7), n) : t || "modern") + ".css"), r.type = "text/css", r.rel = "stylesheet", document.getElementsByTagName("head")[0].appendChild(r)
+            }("theme", n, 7), n) : t || "modern") + ".css"), r.type = "text/css", r.rel = "stylesheet", document
         }()
 }();
 //# sourceMappingURL=settings.js.map
