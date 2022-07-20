@@ -10,5 +10,4 @@ public class Config {
     public static final String CHARSET = "UTF-8";
     public static final String URL = String.format("jdbc:%s://%s:%d/%s?user=%s&password=%s&charSet=%s", DATABASE, HOST, PORT, DB_NAME, USER, PASS, CHARSET);
     public static long ROWS = 0;
-    public static final long RECORDS = 100;
 }

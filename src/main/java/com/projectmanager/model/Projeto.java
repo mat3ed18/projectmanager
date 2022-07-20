@@ -2,6 +2,7 @@ package com.projectmanager.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.projectmanager.database.postgresql.dao.PessoaDAO;
+import com.projectmanager.util.Util;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -16,11 +17,8 @@ import lombok.NoArgsConstructor;
 public class Projeto {
     private long id;
     private String nome;
-    @JsonProperty("inicio")
     private LocalDate dataInicio;
-    @JsonProperty("previsaoFim")
     private LocalDate dataPrevisaoFim;
-    @JsonProperty("fim")
     private LocalDate dataFim;
     private String descricao;
     private String status;
@@ -38,7 +36,7 @@ public class Projeto {
             rs.getString("descricao"),
             rs.getString("status"),
             rs.getFloat("orcamento"), 
-            rs.getString("risco"), 
+            Util.calcularRisco(LocalDate.parse(rs.getString("data_fim"), DateTimeFormatter.ofPattern("yyyy'-'MM'-'dd"))), 
             PessoaDAO.get(Long.parseLong(rs.getString("idgerente")))
         );
     }

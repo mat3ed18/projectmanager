@@ -1,18 +1,15 @@
 package com.projectmanager.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.projectmanager.config.Config;
-import com.projectmanager.controller.ProjectManagerController;
 import com.projectmanager.database.postgresql.dao.PessoaDAO;
 import com.projectmanager.database.postgresql.dao.ProjetoDAO;
 import com.projectmanager.model.Pessoa;
 import com.projectmanager.model.Projeto;
 import jakarta.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,6 +21,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import static java.time.temporal.ChronoUnit.DAYS;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -38,6 +36,10 @@ import java.util.Scanner;
 import org.springframework.http.HttpStatus;
 
 public class Util {
+    
+    public static void main(String[] args) {
+        fazerInsercoes();
+    }
     
     public static ArrayList<String> getKeys(ObjectNode json) {
         Iterator<Entry<String, JsonNode>> nodes = json.fields();
@@ -60,7 +62,6 @@ public class Util {
             json.put("location", sqlEx.getLocalizedMessage());
             json.put("message", sqlEx.getMessage());
             json.put("state", sqlEx.getSQLState());
-            ex.printStackTrace();
         } 
         
         else if (ex instanceof JsonProcessingException) {
@@ -412,14 +413,43 @@ public class Util {
             long projetoId = sc.nextLong();
             System.out.println("Digite o ID do membro:");
             long pessoaId = sc.nextLong();
+            if (!ProjetoDAO.isMembro(projetoId, pessoaId) && (ProjetoDAO.get(projetoId) != null && PessoaDAO.get(pessoaId) != null)) {
+                long id = ProjetoDAO.adicionarMembro(projetoId, pessoaId);
+                System.out.println("ID da associação: " + id);
+                System.out.println("Parabéns! O membro foi adicionado com sucesso!");
+            } else {
+                System.out.println(">>> ID'S NÃO CORRESPONDEM OU JÁ EXISTE");
+            }
             
-            long id = ProjetoDAO.adicionarMembro(projetoId, pessoaId);
-            
-            System.out.println("ID da associação: " + id);
-            System.out.println((id > 0) ? "Parabéns! O membro foi adicionado com sucesso!" : "Houve um erro aí! iiiiiiiiiih");
         } catch (SQLException ex) {
             System.out.println(Util.formatException(ex));
+            ex.printStackTrace();
         }
+    }
+    
+    public static void fazerInsercoes() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println(" \n--- I N S E R Ç Õ E S  no  PostgreSQL ---\n ");
+        System.out.println("Vamos iniciar (1 - Sim / 2 - Não) ?");
+
+        while (sc.nextInt() == 1) {
+            System.out.println("Selecione uma opção: \n1 - Adicionar Usuário \n2 - Adicionar Projeto \n3 - Adicionar Membro");
+            switch (sc.nextInt()) {
+                case 1: 
+                    cadastrarPessoa();
+                break;
+                case 2: 
+                    cadastrarProjeto();
+                break;
+                case 3: 
+                    adicionarMembro();
+                break;
+            }
+
+            System.out.println(" \n--- I N S E R Ç Õ E S  no  PostgreSQL ---\n ");
+            System.out.println("Deseja continuar (1 - Sim / 2 - Não) ?");
+        }
+        System.out.println("encerrado");
     }
     
     public static String getURL(HttpServletRequest request) {
@@ -446,5 +476,12 @@ public class Util {
         }
         
         return codigo;
+    }
+    
+    public static String calcularRisco(LocalDate dataFinal) {
+        long dias = DAYS.between(LocalDate.now(), dataFinal);
+        if ((dias >= 0 && dias <= 14) || dias < 0) return "ALTO RISCO";
+        else if (dias >= 14 && dias <= 30) return "MÉDIO RISCO"; 
+        else return "BAIXO RISCO";
     }
 }

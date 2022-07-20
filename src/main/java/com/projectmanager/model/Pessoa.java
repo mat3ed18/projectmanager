@@ -1,6 +1,5 @@
 package com.projectmanager.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -16,7 +15,6 @@ public class Pessoa {
     private long id;
     private String nome;
     private String cpf;
-    @JsonProperty("nascimento")
     private LocalDate dataNascimento;
     private boolean isFuncionario;
     

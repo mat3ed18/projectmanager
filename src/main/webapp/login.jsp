@@ -1,6 +1,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="com.projectmanager.util.Util"%>
 
+<% String BASE_URL = Util.getURL(request); %>
+
 <!DOCTYPE html>
 <f:view>
     <html lang="en">
@@ -32,7 +34,7 @@
                                         Conecte-se para gerenciar os projetos
                                     </p>
                                 </div>
-                                <%= request.getSession(false).getAttribute("token") %>
+                                <!-- // request.getSession(false).getAttribute("token") -->
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="m-sm-4">
@@ -41,14 +43,9 @@
                                                     <label>CPF</label>
                                                     <input class="form-control mt-2 form-control-lg" type="text" name="cpf" placeholder="Digite seu CPF" data-mask="000.000.000-00" data-reverse="true" autocomplete="off" maxlength="14"/>
                                                 </div>
-                                                <div>
-                                                    <div class="form-check align-items-center">
-                                                        <input id="customControlInline" type="checkbox" class="form-check-input" name="rememberMe" value=""/>
-                                                        <label class="form-check-label text-small" for="customControlInline">Lembre-me na próxima vez que entrar</label>
-                                                    </div>
-                                                </div>
+                                                <a href="<%= BASE_URL %>/register">Cadastro</a>
                                                 <div class="text-center mt-3">
-                                                     <button type="submit" class="btn btn-lg btn-primary">Acessar</button> 
+                                                     <button type="submit" class="btn btn-lg btn-primary">Acessar</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -64,7 +61,7 @@
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
                     $("#validation-form").validate({
-                        focusInvalid: true,
+                        focusInvalid: false,
                         rules: {
                             "cpf": {
                                 required: true,
@@ -88,11 +85,6 @@
                             var $el = $(element);
                             var $parent = $el.parents(".error-placeholder");
                             $el.addClass("is-invalid");
-
-                            // Select2 and Tagsinput
-                            if ($el.hasClass("select2-hidden-accessible") || $el.attr("data-role") === "tagsinput") {
-                                $el.parent().addClass("is-invalid");
-                            }
                         },
                         unhighlight: function (element) {
                             $(element).parents(".error-placeholder").find(".is-invalid").removeClass("is-invalid");
@@ -102,11 +94,11 @@
                     $("form").on("submit", function (e) {
                         e.preventDefault();
                         $(this).ajaxSubmit({
-                            url: "<%= Util.getURL(request) %>/projectmanager/login",
+                            url: "<%= BASE_URL %>/projectmanager/login",
                             type: "POST",
                             success: function (data, statusText, jqXHR) {
                                 toastr["success"]("Login efetuado com sucesso!", "Seja bem-vindo(a) " + data.nome, { positionClass: "toast-top-full-width", closeButton: true, progressBar: true, newestOnTop: false, timeOut: 5000, onHidden: function () {
-                                    window.location.href = "<%= Util.getURL(request) %>/projectmanager/";
+                                    window.location.href = "<%= BASE_URL %>/home";
                                 }});
                             },
                             error: function (jqXHR, statusText, error) {

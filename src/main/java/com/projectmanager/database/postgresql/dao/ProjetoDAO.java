@@ -74,7 +74,7 @@ public class ProjetoDAO {
     public static Projeto get(long id) throws SQLException {
         try (
             java.sql.Connection conn = DriverManager.getConnection(Config.URL);
-            PreparedStatement stmt = conn.prepareStatement("SELECT p.id, " + Util.formatarColunas(COLUNAS_TABELA, "p") + " FROM projeto p WHERE p.id = ?");
+            PreparedStatement stmt = conn.prepareStatement("SELECT p.id, " + Util.formatarColunas(COLUNAS_TABELA, "p") + ", p.status FROM projeto p WHERE p.id = ?");
         ) {
             stmt.setLong(1, id);
             return getProjeto(stmt);
@@ -84,7 +84,7 @@ public class ProjetoDAO {
     public static List<Projeto> list(String coluna, String ordem, long limit, long offset) throws SQLException {
         try (
             java.sql.Connection conn = DriverManager.getConnection(Config.URL);
-            PreparedStatement stmt = conn.prepareStatement(String.format("SELECT p.id, %s FROM projeto p ORDER BY p.%s %s LIMIT ? OFFSET ?", Util.formatarColunas(COLUNAS_TABELA, "p"), coluna, ordem));
+            PreparedStatement stmt = conn.prepareStatement(String.format("SELECT p.id, %s, p.status FROM projeto p ORDER BY p.%s %s LIMIT ? OFFSET ?", Util.formatarColunas(COLUNAS_TABELA, "p"), coluna, ordem));
         ) {
             stmt.setLong(1, limit);
             stmt.setLong(2, offset);
@@ -97,7 +97,7 @@ public class ProjetoDAO {
     public static List<Projeto> find(String q, String coluna, String ordem, long limit, long offset) throws SQLException {
         try (
             java.sql.Connection conn = DriverManager.getConnection(Config.URL);
-            PreparedStatement stmt = conn.prepareStatement(String.format("SELECT p.id, %s FROM projeto p WHERE %s ORDER BY p.%s %s LIMIT ? OFFSET ?", Util.formatarColunas(COLUNAS_TABELA, "p"), Util.buildQuery(q, "projeto", new String[]{"nome", "descricao", "data_inicio", "data_previsao_fim", "data_fim"}), coluna, ordem));
+            PreparedStatement stmt = conn.prepareStatement(String.format("SELECT p.id, %s, p.status FROM projeto p WHERE %s ORDER BY p.%s %s LIMIT ? OFFSET ?", Util.formatarColunas(COLUNAS_TABELA, "p"), Util.buildQuery(q, "projeto", new String[]{"nome", "descricao", "data_inicio", "data_previsao_fim", "data_fim"}), coluna, ordem));
         ) {
             int index = 1;
             stmt.setString(index, "%" + q + "%");
@@ -126,18 +126,13 @@ public class ProjetoDAO {
     public static long adicionarMembro(long projetoId, long pessoaId) throws SQLException {
         try (
             java.sql.Connection conn = DriverManager.getConnection(Config.URL);
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO membros (idprojeto, idpessoa) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO membros (idprojeto, idpessoa) VALUES (?, ?)");
         ) {
             stmt.setLong(1, projetoId);
             stmt.setLong(2, pessoaId);
             
-            stmt.executeUpdate();
-            
-            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) return generatedKeys.getLong(1);
-            }
+            return stmt.executeUpdate();
         }
-        return 0;
     }
     
     public static int removerMembro(long projetoId, long pessoaId) throws SQLException {
@@ -149,6 +144,21 @@ public class ProjetoDAO {
             stmt.setLong(2, pessoaId);
             return stmt.executeUpdate();
         }
+    }
+    
+    public static boolean isMembro(long projetoId, long pessoaId) throws SQLException {
+        try (
+            java.sql.Connection conn = DriverManager.getConnection(Config.URL);
+            PreparedStatement stmt = conn.prepareStatement("SELECT true AS valid FROM membros m WHERE m.idprojeto = ? AND m.idpessoa = ?");
+        ) {
+            stmt.setLong(1, projetoId);
+            stmt.setLong(2, pessoaId);
+            @Cleanup ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getBoolean("valid");
+            }
+        }
+        return false;
     }
     
     public static int removerTodos(Projeto projeto) throws SQLException {
@@ -351,6 +361,47 @@ public class ProjetoDAO {
             Config.ROWS = Util.countQuery(stmt);
             return getProjetos(stmt);
         }
+    }
+    
+    public static long qtdProjetos() throws SQLException {
+        try (
+            java.sql.Connection conn = DriverManager.getConnection(Config.URL);
+            PreparedStatement stmt = conn.prepareStatement(String.format("SELECT COUNT(p.id) AS qtd FROM projeto p"))
+        ) {
+            @Cleanup ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getLong("qtd");
+            }
+        }
+        return 0;
+    }
+    
+    public static long totalProjetosMembro(long idPessoa) throws SQLException {
+        try (
+            java.sql.Connection conn = DriverManager.getConnection(Config.URL);
+            PreparedStatement stmt = conn.prepareStatement(String.format("SELECT COUNT(m.idprojeto) AS qtd FROM membros m WHERE m.idpessoa = ?"))
+        ) {
+            stmt.setLong(1, idPessoa);
+            @Cleanup ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getLong("qtd");
+            }
+        }
+        return 0;
+    }
+    
+    public static long totalMembrosProjeto(long idProjeto) throws SQLException {
+        try (
+            java.sql.Connection conn = DriverManager.getConnection(Config.URL);
+            PreparedStatement stmt = conn.prepareStatement(String.format("SELECT COUNT(m.idpessoa) AS qtd FROM membros m WHERE m.idprojeto = ?"))
+        ) {
+            stmt.setLong(1, idProjeto);
+            @Cleanup ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getLong("qtd");
+            }
+        }
+        return 0;
     }
     
     private static Projeto getProjeto(PreparedStatement stmt) throws SQLException {

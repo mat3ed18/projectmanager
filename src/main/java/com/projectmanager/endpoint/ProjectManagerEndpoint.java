@@ -31,7 +31,7 @@ public class ProjectManagerEndpoint {
         }
     }
     
-    @GetMapping("/pessoa/listar")
+    @GetMapping("/pessoas")
     public ResponseEntity<?> listarPessoas(@RequestParam Map<String, String> data) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(Util.formatResponse(HttpStatus.OK, data, service.getPessoas(data.get("coluna"), data.get("ordem"), data.get("pagina"), data.get("qtd"))));
@@ -40,7 +40,7 @@ public class ProjectManagerEndpoint {
         }
     }
     
-    @GetMapping("/pessoa/buscar")
+    @GetMapping("/pessoas/buscar")
     public ResponseEntity<?> buscarPessoas(@RequestParam Map<String, String> data) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body((data.get("q") != null) ? Util.formatResponse(HttpStatus.OK, data, service.buscarPessoas(data.get("q"), data.get("coluna"), data.get("ordem"), data.get("pagina"), data.get("qtd"))) : "{}");
@@ -58,7 +58,7 @@ public class ProjectManagerEndpoint {
         }
     }
     
-    @GetMapping("/projeto/listar")
+    @GetMapping("/projetos")
     public ResponseEntity<?> listarProjetos(@RequestParam Map<String, String> data) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(Util.formatResponse(HttpStatus.OK, data, service.getProjetos(data.get("coluna"), data.get("ordem"), data.get("pagina"), data.get("qtd"))));
@@ -67,7 +67,7 @@ public class ProjectManagerEndpoint {
         }
     }
     
-    @GetMapping("/projeto/buscar")
+    @GetMapping("/projetos/buscar")
     public ResponseEntity<?> buscarProjetos(@RequestParam Map<String, String> data) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body((data.get("q") != null) ? Util.formatResponse(HttpStatus.OK, data, service.buscarProjetos(data.get("q"), data.get("coluna"), data.get("ordem"), data.get("pagina"), data.get("qtd"))) : "{}");

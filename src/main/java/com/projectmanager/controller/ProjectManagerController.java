@@ -19,7 +19,6 @@ import com.projectmanager.model.Pessoa;
 import com.projectmanager.model.Projeto;
 import com.projectmanager.service.ProjectManagerService;
 import com.projectmanager.util.Util;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -82,7 +81,7 @@ public class ProjectManagerController {
         }
     }
     
-    @GetMapping("/pessoa/listar")
+    @GetMapping("/pessoas/listar")
     public ResponseEntity<?> listarPessoas(@RequestParam Map<String, String> data) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(Util.formatResponse(HttpStatus.OK, data, service.getPessoas(data.get("coluna"), data.get("ordem"), data.get("pagina"), data.get("qtd"))));
@@ -91,7 +90,7 @@ public class ProjectManagerController {
         }
     }
     
-    @GetMapping("/pessoa/buscar")
+    @GetMapping("/pessoas/buscar")
     public ResponseEntity<?> buscarPessoas(@RequestParam Map<String, String> data) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body((data.get("q") != null) ? Util.formatResponse(HttpStatus.OK, data, service.buscarPessoas(data.get("q"), data.get("coluna"), data.get("ordem"), data.get("pagina"), data.get("qtd"))) : "{}");
@@ -138,7 +137,7 @@ public class ProjectManagerController {
         }
     }
     
-    @GetMapping("/projeto/listar")
+    @GetMapping("/projetos")
     public ResponseEntity<?> listarProjetos(@RequestParam Map<String, String> data) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(Util.formatResponse(HttpStatus.OK, data, service.getProjetos(data.get("coluna"), data.get("ordem"), data.get("pagina"), data.get("qtd"))));
@@ -147,7 +146,7 @@ public class ProjectManagerController {
         }
     }
     
-    @GetMapping("/projeto/buscar")
+    @GetMapping("/projetos/buscar")
     public ResponseEntity<?> buscarProjetos(@RequestParam Map<String, String> data) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body((data.get("q") != null) ? Util.formatResponse(HttpStatus.OK, data, service.buscarProjetos(data.get("q"), data.get("coluna"), data.get("ordem"), data.get("pagina"), data.get("qtd"))) : "{}");
@@ -218,7 +217,7 @@ public class ProjectManagerController {
             if (pessoa != null) {
                 HttpSession session = request.getSession();
                 session.setAttribute("token", Util.gerarCodigo(30));
-                System.out.println("uma sessão");
+                session.setAttribute("user_id", pessoa.getId());
                 return ResponseEntity.status(HttpStatus.OK).body(pessoa);
             } else {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"O usuário não foi encontrado\"}");

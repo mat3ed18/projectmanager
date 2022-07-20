@@ -138,6 +138,19 @@ public class PessoaDAO {
         }
     }
     
+    public static long qtdPessoas() throws SQLException {
+        try (
+            java.sql.Connection conn = DriverManager.getConnection(Config.URL);
+            PreparedStatement stmt = conn.prepareStatement(String.format("SELECT COUNT(p.id) AS qtd FROM pessoa p"))
+        ) {
+            @Cleanup ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getLong("qtd");
+            }
+        }
+        return 0;
+    }
+    
     public static Pessoa getPessoa(PreparedStatement stmt) throws SQLException {
         @Cleanup ResultSet rs = stmt.executeQuery();
         if (rs.next()) {
