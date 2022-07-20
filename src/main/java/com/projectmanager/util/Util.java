@@ -1,14 +1,17 @@
 package com.projectmanager.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.projectmanager.config.Config;
+import com.projectmanager.controller.ProjectManagerController;
 import com.projectmanager.database.postgresql.dao.PessoaDAO;
 import com.projectmanager.database.postgresql.dao.ProjetoDAO;
 import com.projectmanager.model.Pessoa;
 import com.projectmanager.model.Projeto;
+import java.io.IOException;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,7 +37,7 @@ import org.springframework.http.HttpStatus;
 
 public class Util {
     public static void main(String[] args) {
-        adicionarMembro();
+        
     }
     
     public static ArrayList<String> getKeys(ObjectNode json) {
