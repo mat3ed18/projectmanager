@@ -9,9 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 public class ViewResolver {
 
-    @RequestMapping({"/home"})
+    @RequestMapping("/")
     public String home() {
-        return "/inicio.jsp";
+        return "/login.jsp";
     }
     
+    @RequestMapping("/projectmanager")
+    public String index() {
+        return "/index.jsp";
+    }
 }

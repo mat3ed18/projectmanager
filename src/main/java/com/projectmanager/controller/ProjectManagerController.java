@@ -19,6 +19,10 @@ import com.projectmanager.model.Pessoa;
 import com.projectmanager.model.Projeto;
 import com.projectmanager.service.ProjectManagerService;
 import com.projectmanager.util.Util;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.Map;
 
@@ -64,6 +68,15 @@ public class ProjectManagerController {
     public ResponseEntity<?> getPessoa(@RequestParam Map<String, String> data) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body((data.get("id") != null) ? service.getPessoa(data.get("id")) : "{}");
+        } catch (SQLException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Util.formatException(ex));
+        }
+    }
+    
+    @GetMapping("/pessoa/cpf")
+    public ResponseEntity<?> getPessoa(@RequestParam("q") String cpf) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body((cpf != null) ? service.getPessoaPorCpf(cpf) : "{}");
         } catch (SQLException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Util.formatException(ex));
         }
@@ -193,6 +206,25 @@ public class ProjectManagerController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body((data.get("q") != null && data.get("pessoaId") != null) ? Util.formatResponse(HttpStatus.OK, data, service.findProjects(data.get("q"), data.get("pessoaId"), data.get("coluna"), data.get("ordem"), data.get("pagina"), data.get("qtd"))) : "{}");
         } catch (SQLException | JsonProcessingException | NullPointerException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Util.formatException(ex));
+        }
+    }
+    
+    @PostMapping("/login")
+    public ResponseEntity<?> login(HttpServletRequest request, HttpServletResponse response, @RequestParam("cpf") String cpf) {
+        try {
+            Pessoa pessoa = (cpf != null) ? service.getPessoaPorCpf(cpf) : null;
+            
+            if (pessoa != null) {
+                HttpSession session = request.getSession();
+                session.setAttribute("token", Util.gerarCodigo(30));
+                System.out.println("uma sessão");
+                return ResponseEntity.status(HttpStatus.OK).body(pessoa);
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"O usuário não foi encontrado\"}");
+            }
+            
+        } catch (SQLException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Util.formatException(ex));
         }
     }

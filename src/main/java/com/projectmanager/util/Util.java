@@ -11,6 +11,7 @@ import com.projectmanager.database.postgresql.dao.PessoaDAO;
 import com.projectmanager.database.postgresql.dao.ProjetoDAO;
 import com.projectmanager.model.Pessoa;
 import com.projectmanager.model.Projeto;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -32,13 +33,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.Scanner;
 import org.springframework.http.HttpStatus;
 
 public class Util {
-    public static void main(String[] args) {
-        
-    }
     
     public static ArrayList<String> getKeys(ObjectNode json) {
         Iterator<Entry<String, JsonNode>> nodes = json.fields();
@@ -421,5 +420,31 @@ public class Util {
         } catch (SQLException ex) {
             System.out.println(Util.formatException(ex));
         }
+    }
+    
+    public static String getURL(HttpServletRequest request) {
+        String url = request.getRequestURL().toString();
+        String baseURL = url.substring(0, url.length() - request.getRequestURI().length());
+        return baseURL;
+    }
+    
+    public static int randomNumber(int min, int max) {
+        Random random = new Random();
+        return random.nextInt(max + 1 - min) + min;
+    }
+    
+    public static String randomCharacter() {
+        String[] letras = ("abcdefghijklmnopqrstuvwxyz" + "0123456789" + "abcdefghijklmnopqrstuvwxyz".toUpperCase()).split("");
+        return letras[randomNumber(0, letras.length - 1)];
+    }
+    
+    public static String gerarCodigo(int size) {
+        String codigo = "";
+        
+        for (int i = 0; i < size; i++) {
+            codigo += randomCharacter();
+        }
+        
+        return codigo;
     }
 }

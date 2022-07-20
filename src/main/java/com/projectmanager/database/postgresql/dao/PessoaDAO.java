@@ -86,6 +86,16 @@ public class PessoaDAO {
             return getPessoa(stmt);
         }
     }
+    
+    public static Pessoa get(String cpf) throws SQLException {
+        try (
+            java.sql.Connection conn = DriverManager.getConnection(Config.URL);
+            PreparedStatement stmt = conn.prepareStatement("SELECT p.id, " + Util.formatarColunas(COLUNAS_TABELA, "p") + " FROM pessoa p WHERE p.cpf = ?");
+        ) {
+            stmt.setString(1, cpf);
+            return getPessoa(stmt);
+        }
+    }
         
     public static List<Pessoa> list(String coluna, String ordem, long limit, long offset) throws SQLException {
         try (

@@ -32,6 +32,10 @@ public class ProjectManagerService {
         return PessoaDAO.get(Long.parseLong(id));
     }
     
+    public Pessoa getPessoaPorCpf(String cpf) throws SQLException {
+        return PessoaDAO.get(cpf);
+    }
+    
     public List<Pessoa> getPessoas(String coluna, String ordem, String page, String limit) throws SQLException {
         long offset = (page != null && limit != null) ? (Long.parseLong(page) - 1) * Long.parseLong(limit) : 0;
         return PessoaDAO.list((coluna != null) ? coluna : "id", (ordem != null) ? ordem : "ASC", (limit != null) ? Long.parseLong(limit) : Config.RECORDS, offset);
