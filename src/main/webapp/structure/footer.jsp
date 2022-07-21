@@ -21,7 +21,7 @@
                 </ul>
             </div>
             <div class="col-4 text-end">
-                <p class="mb-0">2022 - <a href="dashboard-default.html" class="text-muted">Project Manager</a></p>
+                <p class="mb-0">2022 - <a href="#" class="text-muted">Project Manager</a></p>
             </div>
         </div>
     </div>

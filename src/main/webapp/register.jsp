@@ -31,15 +31,15 @@
                                             <form id="validation-form" novalidate="novalidate">
                                                 <div class="mb-3 error-placeholder">
                                                     <label>nome</label>
-                                                    <input class="form-control mt-2 form-control-lg" type="text" name="nome" placeholder="Digite seu nome" />
+                                                    <input class="form-control mt-2 form-control-lg" type="text" name="nome" placeholder="Digite seu nome" required/>
                                                 </div>
                                                 <div class="mb-3 error-placeholder">
                                                     <label>cpf</label>
-                                                    <input class="form-control mt-2 form-control-lg" type="text" name="cpf" placeholder="Digite seu CPF" data-mask="000.000.000-00" data-reverse="true" autocomplete="off" maxlength="14" />
+                                                    <input class="form-control mt-2 form-control-lg" type="text" name="cpf" placeholder="Digite seu CPF" data-mask="000.000.000-00" data-reverse="true" autocomplete="off" maxlength="14" required/>
                                                 </div>
                                                 <div class="mb-3 error-placeholder">
                                                     <label>data de nascimento</label>
-                                                    <input class="form-control mt-2 form-control-lg" type="date" name="dataNascimento" placeholder="Digite sua data de nascimento" />
+                                                    <input class="form-control mt-2 form-control-lg" type="date" name="dataNascimento" placeholder="Digite sua data de nascimento" required/>
                                                 </div>
                                                 <div class="mb-3">
                                                     <input id="customControlInline" type="checkbox" class="form-check-input" name="isFuncionario" />
@@ -61,7 +61,7 @@
             <jsp:include page="structure/scripts.jsp"/>
             <script>
                 $("#validation-form").validate({
-                    focusInvalid: true,
+                    focusInvalid: false,
                     rules: {
                         "nome": {
                             required: true
@@ -96,10 +96,31 @@
                     highlight: function (element) {
                         var $el = $(element);
                         var $parent = $el.parents(".error-placeholder");
+                        $el.addClass("is-invalid");
                     },
                     unhighlight: function (element) {
                         $(element).parents(".error-placeholder").find(".is-invalid").removeClass("is-invalid");
                     }
+                });
+            </script>
+            <script>
+                $("form").on("submit", function (e) {
+                    e.preventDefault();
+                    if ($(this).validate().errorList.length == 0) {
+                        $(this).ajaxSubmit({
+                            url: "<%= BASE_URL %>/projectmanager/pessoa/salvar",
+                            type: "POST",
+                            success: function (data, statusText, jqXHR) {
+                                toastr["success"]("Cadastro efetuado com sucesso!", "Seja bem-vindo(a) " + data.nome, { positionClass: "toast-top-full-width", closeButton: true, progressBar: true, newestOnTop: false, timeOut: 2000, onHidden: function () {
+                                   window.location.href = "<%= BASE_URL %>/";
+                                }});
+                            },
+                            error: function (jqXHR, statusText, error) {
+                                toastr["error"]("" + jqXHR.responseJSON.message + "", "ERRO", { positionClass: "toast-top-full-width", closeButton: true, progressBar: true, newestOnTop: false, timeOut: 2000 });
+                            }
+                        });
+                    }
+                    return false;
                 });
             </script>
         </body>

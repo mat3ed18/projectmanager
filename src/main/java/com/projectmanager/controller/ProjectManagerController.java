@@ -35,8 +35,9 @@ public class ProjectManagerController {
     }
     
     @PostMapping("/pessoa/salvar")
-    public ResponseEntity<?> create(@ModelAttribute("pessoa") Pessoa pessoa) {
+    public ResponseEntity<?> create(@ModelAttribute("pessoa") Pessoa pessoa, @RequestParam(value = "isFuncionario", required = false, defaultValue = "") String isFuncionario) {
         try {
+            pessoa.setFuncionario(isFuncionario.equals("on"));
             long id = service.create(pessoa);
             return ResponseEntity.status(HttpStatus.CREATED).body(PessoaDAO.get(id));
         } catch (SQLException ex) {
@@ -45,8 +46,9 @@ public class ProjectManagerController {
     }
     
     @PutMapping("/pessoa/atualizar")
-    public ResponseEntity<?> update(@ModelAttribute("pessoa") Pessoa pessoa) {
+    public ResponseEntity<?> update(@ModelAttribute("pessoa") Pessoa pessoa, @RequestParam(value = "isFuncionario", required = false, defaultValue = "") String isFuncionario) {
         try {
+            pessoa.setFuncionario(isFuncionario.equals("on"));
             service.update(pessoa);
             return ResponseEntity.status(HttpStatus.OK).body("{\"mensagem\": \"O usuário foi atualizado com sucesso\"}");
         } catch (SQLException ex) {
@@ -109,19 +111,34 @@ public class ProjectManagerController {
     }
     
     @PostMapping("/projeto/salvar")
-    public ResponseEntity<?> create(@ModelAttribute("projeto") Projeto projeto) {
+    public ResponseEntity<?> create(@ModelAttribute("projeto") Projeto projeto, @RequestParam("s_gerente") String idGerente, @RequestParam("s_membros") String idsMembros) {
         try {
+            projeto.setGerente(PessoaDAO.get(Long.parseLong(idGerente)));
             long id = service.create(projeto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(PessoaDAO.get(id));
+            
+            String[] idMembros = idsMembros.split(",");
+            for (String idMembro : idMembros) {
+                service.associate(id, Long.parseLong(idMembro));
+            }
+            
+            return ResponseEntity.status(HttpStatus.CREATED).body(ProjetoDAO.get(id));
         } catch (SQLException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Util.formatException(ex));
         }
     }
     
     @PutMapping("/projeto/atualizar")
-    public ResponseEntity<?> update(@ModelAttribute("projeto") Projeto projeto) {
+    public ResponseEntity<?> update(@ModelAttribute("projeto") Projeto projeto, @RequestParam("s_gerente") String idGerente, @RequestParam("s_membros") String idsMembros) {
         try {
+            projeto.setGerente(PessoaDAO.get(Long.parseLong(idGerente)));
             service.update(projeto);
+            
+            service.disassociateAllProjeto(projeto.getId());
+            
+            String[] idMembros = idsMembros.split(",");
+            for (String idMembro : idMembros) {
+                service.associate(projeto.getId(), Long.parseLong(idMembro));
+            }
             return ResponseEntity.status(HttpStatus.OK).body("{\"mensagem\": O usuário foi atualizado com sucesso}");
         } catch (SQLException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Util.formatException(ex));

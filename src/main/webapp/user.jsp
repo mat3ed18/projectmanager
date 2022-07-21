@@ -24,7 +24,7 @@
                                 <h1 class="header-title" id="nome"></h1>
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="dashboard-default.html">Project Manager</a></li>
+                                        <li class="breadcrumb-item"><a href="<%= BASE_URL %>/home">Project Manager</a></li>
                                         <li class="breadcrumb-item"><a href="#">Membros</a></li>
                                         <li class="breadcrumb-item active" aria-current="page">Usuário</li>
                                     </ol>

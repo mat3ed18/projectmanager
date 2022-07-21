@@ -4,3 +4,4 @@
 <% String BASE_URL = Util.getURL(request); %>
 
 <script src="<%= BASE_URL %>/js/app.js"></script>
+<script src="<%= BASE_URL %>/js/jquery.form.min.js"></script>

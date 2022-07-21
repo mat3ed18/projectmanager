@@ -57,14 +57,14 @@ public class ViewResolver {
     @RequestMapping("/project/{id}")
     public String project(@PathVariable String id, ModelMap modelMap) {
         modelMap.put("id", id);
-        modelMap.addAttribute("editar", false);
+        modelMap.put("editar", "true");
         return "/project.jsp";
     }
     
     @RequestMapping("/project/{id}/edit")
     public String edit(@PathVariable String id, ModelMap modelMap, HttpServletRequest request) {
         modelMap.put("id", id);
-        modelMap.addAttribute("editar", true);
+        modelMap.put("editar", "false");
         return "/add.jsp";
     }
     

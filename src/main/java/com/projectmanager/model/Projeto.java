@@ -1,6 +1,6 @@
 package com.projectmanager.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.projectmanager.database.postgresql.dao.PessoaDAO;
 import com.projectmanager.util.Util;
 import java.sql.ResultSet;
@@ -10,6 +10,8 @@ import java.time.format.DateTimeFormatter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Value;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Data
 @AllArgsConstructor
@@ -17,8 +19,11 @@ import lombok.NoArgsConstructor;
 public class Projeto {
     private long id;
     private String nome;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataInicio;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataPrevisaoFim;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataFim;
     private String descricao;
     private String status;

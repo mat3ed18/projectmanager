@@ -45,41 +45,32 @@
                                             <h5 class="card-title mb-0">Insira as informações do projeto</h5>
                                         </div>
                                         <div class="card-body">
-                                            <form id="validation-form" class="row" novalidate="novalidate">
+                                            <form id="validation-form" novalidate="novalidate" class="row">
                                                 <div class="col-12 mb-3 error-placeholder">
                                                     <label class="form-label">nome</label>
-                                                    <input type="text" class="form-control" name="nome" />
+                                                    <input type="text" class="form-control" name="nome" required/>
                                                 </div>
                                                 <div class="col-2 mb-3 error-placeholder">
                                                     <label class="form-label">data inicial</label>
-                                                    <input type="date" class="form-control" name="data_inicial" />
+                                                    <input type="date" class="form-control" name="dataInicio" required/>
                                                 </div>
                                                 <div class="col-2 mb-3 error-placeholder">
                                                     <label class="form-label">data de previsão do fim</label>
-                                                    <input type="date" class="form-control" name="data_previsao_fim" />
+                                                    <input type="date" class="form-control" name="dataPrevisaoFim" required/>
                                                 </div>
                                                 <div class="col-2 mb-3 error-placeholder">
                                                     <label class="form-label">data final</label>
-                                                    <input type="date" class="form-control" name="data_final" />
+                                                    <input type="date" class="form-control" name="dataFim" required/>
                                                 </div>
                                                 <div class="col-2 mb-3 error-placeholder">
                                                     <label class="form-label">orçamento</label>
-                                                    <input type="text" class="form-control" name="orcamento" data-mask="#.###.###.###.##0,00" data-reverse="true" autocomplete="off" />
+                                                    <input type="number" class="form-control" name="orcamento" step="0.01" min="1" required/>
                                                 </div>
                                                 <div class="col-4 mb-3 error-placeholder">
                                                     <label class="form-label">gerente</label>
                                                     <div class="d-flex">
-                                                        <select class="form-control select2-hidden-accessible" name="gerente" style="width: 100%" tabindex="-1" aria-hidden="true" aria-invalid="false">
+                                                        <select class="form-control select2-hidden-accessible" name="s_gerente" style="width: 100%" tabindex="-1" aria-hidden="true" aria-invalid="false" required>
                                                             <option value=""></option>
-                                                            <option value="pitons">Pitons</option>
-                                                            <option value="cams">Cams</option>
-                                                            <option value="nuts">Nuts</option>
-                                                            <option value="bolts">Bolts</option>
-                                                            <option value="stoppers">Stoppers</option>
-                                                            <option value="sling">Sling</option>
-                                                            <option value="skis">Skis</option>
-                                                            <option value="skins">Skins</option>
-                                                            <option value="poles">Poles</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -88,22 +79,13 @@
                                                     <div class="quill-textarea">
                                                         <div id="editor"></div>
                                                     </div>
-                                                    <input type="text" name="descricao" id="descricao" class="form-control">
+                                                    <input type="text" name="descricao" id="descricao" class="form-control" required="">
                                                 </div>
                                                 <div class="col-12 mb-3 error-placeholder">
                                                     <label class="form-label">membros</label>
                                                     <div class="d-flex">
-                                                        <select class="form-control select2-hidden-accessible" name="membros" multiple="" style="width: 100%" tabindex="-1" aria-hidden="true" aria-invalid="false">
+                                                        <select class="form-control select2-hidden-accessible" name="s_membros" multiple="" style="width: 100%" tabindex="-1" aria-hidden="true" aria-invalid="false" required>
                                                             <option value=""></option>
-                                                            <option value="pitons">Pitons</option>
-                                                            <option value="cams">Cams</option>
-                                                            <option value="nuts">Nuts</option>
-                                                            <option value="bolts">Bolts</option>
-                                                            <option value="stoppers">Stoppers</option>
-                                                            <option value="sling">Sling</option>
-                                                            <option value="skis">Skis</option>
-                                                            <option value="skins">Skins</option>
-                                                            <option value="poles">Poles</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -122,36 +104,9 @@
             </div>
             <jsp:include page="structure/scripts.jsp"/>
             <jsp:include page="structure/script-login.jsp"/>
+            
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
-                    $("select[name=\"membros\"]").select2({
-                        theme: "bootstrap4",
-                        placeholder: "Selecione os membros do projeto",
-                        tokenSeparators: [".", ", ", " "]
-                    }).change(function() {
-                        $(this).valid();
-                    });
-
-                    $("select[name=\"gerente\"]").select2({
-                        theme: "bootstrap4",
-                        placeholder: "Selecione o gerente responsável pelo projeto"
-                    }).change(function() {
-                        $(this).valid();
-                    });
-
-                    // Trigger validation on tagsinput change
-                    $("input[name=\"validation-bs-tagsinput\"]").on("itemAdded itemRemoved", function() {
-                        $(this).valid();
-                    });
-
-                    $("select .select2-selection__rendered").css({
-                        padding: "0.8rem 0.7rem 0.3rem 0.7rem"
-                    });
-
-                    $(".select2-search__field").css({
-                        marginTop: "-10%"
-                    });
-
                     // Initialize validation
                     $("#validation-form").validate({
                         focusInvalid: false,
@@ -159,25 +114,25 @@
                             "nome": {
                                 required: true
                             },
-                            "data_inicial": {
+                            "dataInicio": {
                                 required: true
                             },
-                            "data_previsao_fim": {
+                            "dataPrevisaoFim": {
                                 required: true
                             },
-                            "data_final": {
+                            "dataFim": {
                                 required: true
                             },
                             "orcamento": {
                                 required: true
                             },
-                            "gerente": {
+                            "s_gerente": {
                                 required: true
                             },
                             "descricao": {
                                 required: true
                             },
-                            "membros": {
+                            "s_membros": {
                                 required: true
                             }
                         },
@@ -185,25 +140,25 @@
                             "nome": {
                                 required: "Insira o nome do projeto"
                             },
-                            "data_inicial": {
+                            "dataInicio": {
                                 required: "Insira a data inicial do projeto"
                             },
-                            "data_previsao_fim": {
+                            "dataPrevisaoFim": {
                                 required: "Insira a data de previsão final do projeto"
                             },
-                            "data_final": {
+                            "dataFim": {
                                 required: "Insira a data final do projeto"
                             },
                             "orcamento": {
                                 required: "Insira o valor do orçamento do projeto"
                             },
-                            "gerente": {
+                            "s_gerente": {
                                 required: "Selecione o gerente do projeto"
                             },
                             "descricao": {
                                 required: "Digite a descrição do projeto"
                             },
-                            "membros": {
+                            "s_membros": {
                                 required: "Selecione os membros do projeto"
                             }
                         },
@@ -229,13 +184,7 @@
                             $(element).parents(".error-placeholder").find(".is-invalid").removeClass("is-invalid");
                         }
                     });
-                });
-            </script>
-            <script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    if (!window.Quill) {
-                        return $("#editor, #toolbar").remove();
-                    }
+                    
                     var editor = new Quill("#editor", {
                         modules: {
                             toolbar: [
@@ -258,17 +207,65 @@
 
                     $(document).on("keyup", "#editor", function () {
                         var html = editor.root.innerHTML;
-
-                        if (html.replace(/\s/g, "").indexOf("<p></p>") >= 0 || html.replace(/\s/g, "").indexOf("<p><br></p>") >= 0) {
-                            $("#descricao").val(null);
-                        } else {
-                            $("#descricao").val(html);
+                        $("#descricao").val(html);
+                    });
+                    
+                    $("form").on("submit", function (e) {
+                        e.preventDefault();
+                        if ($(this).validate().errorList.length == 0) {
+                            $(this).ajaxSubmit({
+                                url: "<%= BASE_URL %>/projectmanager/projeto/salvar",
+                                type: "POST",
+                                success: function (data, statusText, jqXHR) {
+                                    toastr["success"]("O projeto foi cadastrado com sucesso!", "", { positionClass: "toast-top-full-width", closeButton: true, progressBar: true, newestOnTop: false, timeOut: 2000, onHidden: function () {
+                                        window.location.href = "<%= BASE_URL %>/projects";
+                                    }});
+                                },
+                                error: function (jqXHR, statusText, error) {
+                                    toastr["error"]("" + jqXHR.responseJSON.message + "", "ERRO", { positionClass: "toast-top-full-width", closeButton: true, progressBar: true, newestOnTop: false, timeOut: 2000 });
+                                }
+                            });
                         }
+                        return false;
                     });
                 });
             </script>
             <script>
-                
+                document.addEventListener("DOMContentLoaded", function () {
+                    $.get("<%= BASE_URL %>/projectmanager/funcionarios", {}, function (data) {
+                        for (var i = 0; i < data.results.length; i++) {
+                            $("select[name='s_gerente'], select[name='s_membros']").append("<option value='" + data.results[i].id + "'>" + data.results[i].nome + "</option>");
+                        }
+                    });
+                    
+                    $("select[name=\"s_membros\"]").select2({
+                        theme: "bootstrap4",
+                        placeholder: "Selecione os membros do projeto",
+                        tokenSeparators: [".", ", ", " "]
+                    }).change(function() {
+                        $(this).valid();
+                    });
+
+                    $("select[name=\"s_gerente\"]").select2({
+                        theme: "bootstrap4",
+                        placeholder: "Selecione o gerente responsável pelo projeto"
+                    }).change(function() {
+                        $(this).valid();
+                    });
+
+                    // Trigger validation on tagsinput change
+                    $("input[name=\"validation-bs-tagsinput\"]").on("itemAdded itemRemoved", function() {
+                        $(this).valid();
+                    });
+
+                    $("select .select2-selection__rendered").css({
+                        padding: "0.8rem 0.7rem 0.3rem 0.7rem"
+                    });
+
+                    $(".select2-search__field").css({
+                        marginTop: "-10%"
+                    });
+                });
             </script>
         </body>
     </html>

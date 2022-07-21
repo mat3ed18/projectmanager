@@ -8,15 +8,7 @@
     <html lang="en">
         <head>
             <title>Login | Project Manager</title>
-            <meta charset="utf-8"/>
-            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-            <script src="js/settings.js"></script>
-            <link href="css/modern.css" type="text/css" rel="stylesheet" />
-            <style>
-                #toast-container {
-                    margin-top: 2%;
-                }
-            </style>
+            <jsp:include page="structure/head.jsp"/>
         </head>
         <body class="theme-blue">
             <div class="splash">
@@ -41,7 +33,7 @@
                                             <form id="validation-form" novalidate="novalidate">
                                                 <div class="mb-3 error-placeholder">
                                                     <label>CPF</label>
-                                                    <input class="form-control mt-2 form-control-lg" type="text" name="cpf" placeholder="Digite seu CPF" data-mask="000.000.000-00" data-reverse="true" autocomplete="off" maxlength="14"/>
+                                                    <input class="form-control mt-2 form-control-lg" type="text" name="cpf" placeholder="Digite seu CPF" data-mask="000.000.000-00" data-reverse="true" autocomplete="off" maxlength="14" required/>
                                                 </div>
                                                 <a href="<%= BASE_URL %>/register">Cadastro</a>
                                                 <div class="text-center mt-3">
@@ -56,8 +48,7 @@
                     </div>
                 </div>
             </main>
-            <script src="js/app.js"></script>
-            <script src="js/jquery.form.min.js"></script>
+            <jsp:include page="structure/scripts.jsp"/>
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
                     $("#validation-form").validate({
@@ -93,18 +84,20 @@
                     
                     $("form").on("submit", function (e) {
                         e.preventDefault();
-                        $(this).ajaxSubmit({
-                            url: "<%= BASE_URL %>/projectmanager/login",
-                            type: "POST",
-                            success: function (data, statusText, jqXHR) {
-                                toastr["success"]("Login efetuado com sucesso!", "Seja bem-vindo(a) " + data.nome, { positionClass: "toast-top-full-width", closeButton: true, progressBar: true, newestOnTop: false, timeOut: 2000, onHidden: function () {
-                                    window.location.href = "<%= BASE_URL %>/home";
-                                }});
-                            },
-                            error: function (jqXHR, statusText, error) {
-                                toastr["error"]("" + jqXHR.responseJSON.message + "", "ERRO", { positionClass: "toast-top-full-width", closeButton: true, progressBar: true, newestOnTop: false, timeOut: 2000 });
-                            }
-                        });
+                        if ($(this).validate().errorList.length == 0) {
+                            $(this).ajaxSubmit({
+                                url: "<%= BASE_URL %>/projectmanager/login",
+                                type: "POST",
+                                success: function (data, statusText, jqXHR) {
+                                    toastr["success"]("Login efetuado com sucesso!", "Seja bem-vindo(a) " + data.nome, { positionClass: "toast-top-full-width", closeButton: true, progressBar: true, newestOnTop: false, timeOut: 2000, onHidden: function () {
+                                        window.location.href = "<%= BASE_URL %>/home";
+                                    }});
+                                },
+                                error: function (jqXHR, statusText, error) {
+                                    toastr["error"]("" + jqXHR.responseJSON.message + "", "ERRO", { positionClass: "toast-top-full-width", closeButton: true, progressBar: true, newestOnTop: false, timeOut: 2000 });
+                                }
+                            });
+                        }
                         return false;
                     });
                 });

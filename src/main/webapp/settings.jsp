@@ -52,7 +52,7 @@
                                 </h1>
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="dashboard-default.html">Project Manager</a></li>
+                                        <li class="breadcrumb-item"><a href="<%= BASE_URL %>/home">Project Manager</a></li>
                                         <li class="breadcrumb-item"><a href="#">Minha Conta</a></li>
                                         <li class="breadcrumb-item active" aria-current="page">Configurações</li>
                                     </ol>

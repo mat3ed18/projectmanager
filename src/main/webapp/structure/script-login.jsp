@@ -23,5 +23,10 @@
                 $(this).parent().parent().parent().find("a[data-bs-toggle='collapse']").removeClass("collapsed");
             }
         });
+        
+        String.prototype.formatDate = function () {
+            var arr = this.split("-");
+            return arr[2] + "/" + arr[1] + "/" + arr[0];
+        }
     });
 </script>

@@ -93,6 +93,14 @@ public class ProjectManagerService {
         return ProjetoDAO.removerMembro(idProjeto, idPessoa);
     }
     
+    public int disassociateAllProjeto(long idProjeto) throws SQLException {
+        return ProjetoDAO.removerTodos(ProjetoDAO.get(idProjeto));
+    }
+    
+    public int disassociateAllPessoa(long idPessoa) throws SQLException {
+        return ProjetoDAO.removerTodos(PessoaDAO.get(idPessoa));
+    }
+    
     public List<Pessoa> getMembers(String projetoId, String coluna, String ordem, String page, String limit) throws SQLException {
         long offset = (page != null && limit != null) ? (Long.parseLong(page) - 1) * Long.parseLong(limit) : 0;
         return ProjetoDAO.listarMembros(ProjetoDAO.get(Long.parseLong(projetoId)), (coluna != null) ? coluna : "id", (ordem != null) ? ordem : "ASC", (limit != null) ? Long.parseLong(limit) : ProjetoDAO.totalMembrosProjeto(Long.parseLong(projetoId)), offset);

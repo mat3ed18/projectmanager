@@ -24,12 +24,10 @@
                     <main class="content">
                         <div class="container-fluid">
                             <div class="header">
-                                <h1 class="header-title">
-                                    Desenvolvimento de Software de Automação Comercial para o Supermercado Extra
-                                </h1>
+                                <h1 class="header-title" id="nome"></h1>
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="dashboard-default.html">Project Manager</a></li>
+                                        <li class="breadcrumb-item"><a href="<%= BASE_URL %>/home">Project Manager</a></li>
                                         <li class="breadcrumb-item"><a href="#">Projetos</a></li>
                                         <li class="breadcrumb-item active" aria-current="page">Projeto</li>
                                     </ol>
@@ -43,54 +41,51 @@
                                         </div>
                                         <div class="card-body">
                                             <div class="row g-0">
-                                                <div class="col-sm-12 col-xl-12 col-xxl-12">
-                                                    <p>
-                                                        html
-                                                    </p>
+                                                <div class="col-sm-12 col-xl-12 col-xxl-12" id="descricao">
+
                                                 </div>
                                             </div>
 
                                             <table class="table table-striped table-lg table-responsive my-2">
                                                 <tbody>
                                                     <tr class="text-center">
-                                                        <th colspan="2">INFORMAçõES</th>
+                                                        <th colspan="2">INFORMAÇÕES</th>
                                                     </tr>
                                                     <tr>
                                                         <th>Data Inicial</th>
-                                                        <td>12 de julho de 2022</td>
+                                                        <td id="dataInicio"></td>
                                                     </tr>
                                                     <tr>
                                                         <th>Data de Previsão Final</th>
-                                                        <td>10 de agosto de 2022</td>
+                                                        <td id="dataPrevisaoFim"></td>
                                                     </tr>
                                                     <tr>
                                                         <th>Data Final</th>
-                                                        <td>12 de setembro de 2022</td>
+                                                        <td id="dataFim"></td>
                                                     </tr>
                                                     <tr>
                                                         <th>Orçamento (valor)</th>
-                                                        <td>R$ 46.543,00</td>
+                                                        <td id="orcamento">R$ 46.543,00</td>
                                                     </tr>
                                                     <tr>
                                                         <th>Gerente</th>
-                                                        <td><a href="#">José Santos</a></td>
+                                                        <td id="gerente"></td>
                                                     </tr>
                                                     <tr>
                                                         <th>Status</th>
-                                                        <td><span class="badge bg-success">EM ANDAMENTO</span></td>
+                                                        <td><span class="badge bg-success" id="status"></span></td>
                                                     </tr>
                                                     <tr>
                                                         <th>Risco</th>
-                                                        <td><span class="badge bg-danger me-2">ALTO</span> 29 dias restantes</td>
+                                                        <td><span class="badge bg-danger me-2" id="risco">ALTO</span></td>
                                                     </tr>
                                                     <tr>
-                                                        <th>Membros</th>
-                                                        <td><a href="#" class="btn btn-md btn-primary">Visualizar</a></td>
+                                                        <th colspan="2">Membros</th>
                                                     </tr>
                                                     <tr class="text-center">
                                                         <td colspan="2">
-                                                            <a href="#" class="btn btn-md btn-primary me-2">Editar Projeto</a>
-                                                            <a href="#" class="btn btn-md btn-danger">Excluir Projeto</a>
+                                                            <a href="#" class="btn btn-md btn-primary me-2" id="edit">Editar Projeto</a>
+                                                            <a class="btn btn-md btn-danger">Excluir Projeto</a>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -108,27 +103,24 @@
             <jsp:include page="structure/script-login.jsp"/>
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
-                    // Datatables clients
-                    $("#datatables-clients").DataTable({
-                        responsive: true,
-                        order: [[1, "asc"]],
+                <% if (request.getAttribute("id") != null) { %>
+                    $.get("<%= BASE_URL %>/projectmanager/projeto", {id: "<%= request.getAttribute("id") %>"}, function (data) {
+                        $("#edit").attr("href", "<%= BASE_URL %>/project/" + data.id + "/edit");
+                        $("#nome").html(data.nome);
+                        $("#descricao").html(data.descricao);
+                        $("#dataInicio").html(data.dataInicio.formatDate());
+                        $("#dataPrevisaoFim").html(data.dataPrevisaoFim.formatDate());
+                        $("#dataFim").html(data.dataFim.formatDate());
+                        $("#orcamento").html(data.orcamento.toLocaleString("pt-br", {style: "currency", currency: "BRL"}));
+                        data.gerente = "<a href='<%= BASE_URL %>/user/" + data.gerente.id + "'>" + data.gerente.nome + "</a>";
+                        $("#gerente").html(data.gerente);
+                        $("#status").html(data.status);
+                        $("#risco").html(data.risco);
                     });
+                <% } else { %>
+                    window.location.href = "<%= BASE_URL %>/home";
+                <% } %>
                 });
-            </script>
-            <script>
-            <%
-                if (request.getAttribute("id") != null) {
-                    %>
-                        $.get("<%= BASE_URL %>/projectmanager/projeto", {id: "<%= request.getAttribute("id") %>"}, function (data) {
-                            console.log(data);
-                        });
-                    <%
-                } else {
-                    %>
-                        window.location.href = "<%= BASE_URL %>/home";
-                    <%
-                }
-            %>
             </script>
         </body>
     </html>
