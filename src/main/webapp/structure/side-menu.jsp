@@ -13,15 +13,15 @@
         </div>
         <ul class="sidebar-nav">
             <li class="sidebar-header">Project Manager</li>
-            <li class="sidebar-item active">
-                <a data-bs-target="#projects" data-bs-toggle="collapse" class="sidebar-link" aria-expanded="false"> <i class="align-middle me-2 fas fa-fw fa-project-diagram"></i> <span class="align-middle">Projeto</span> </a>
-                <ul id="projects" class="sidebar-dropdown list-unstyled collapse show" data-bs-parent="#sidebar" style="">
+            <li class="sidebar-item" id="menu_projeto">
+                <a data-bs-target="#projects" data-bs-toggle="collapse" class="sidebar-link collapsed" aria-expanded="false"> <i class="align-middle me-2 fas fa-fw fa-project-diagram"></i> <span class="align-middle">Projeto</span> </a>
+                <ul id="projects" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
                     <li class="sidebar-item"><a class="sidebar-link" href="<%= BASE_URL %>/project/add">Adicionar</a></li>
                     <li class="sidebar-item"><a class="sidebar-link" href="<%= BASE_URL %>/projects">Projetos</a></li>
                     <li class="sidebar-item"><a class="sidebar-link" href="<%= BASE_URL %>/kanban">Kanban <span class="sidebar-badge badge rounded-pill bg-primary">NOVO</span></a></li>
                 </ul>
             </li>
-            <li class="sidebar-item">
+            <li class="sidebar-item" id="menu_conta">
                 <a data-bs-target="#user" data-bs-toggle="collapse" class="sidebar-link collapsed" aria-expanded="false">
                     <i class="align-middle me-2 fas fa-fw fa-user"></i> <span class="align-middle">Minha Conta</span>
                 </a>

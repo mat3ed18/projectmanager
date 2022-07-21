@@ -33,7 +33,7 @@
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="<%= BASE_URL %>/home">Project Manager</a></li>
-                                        <li class="breadcrumb-item"><a>Projeto</a></li>
+                                        <li class="breadcrumb-item"><a href="#">Projeto</a></li>
                                         <li class="breadcrumb-item active" aria-current="page">Adicionar</li>
                                     </ol>
                                 </nav>
@@ -121,7 +121,7 @@
                 </div>
             </div>
             <jsp:include page="structure/scripts.jsp"/>
-            <jsp:include page="structure/scripts-login.jsp"/>
+            <jsp:include page="structure/script-login.jsp"/>
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
                     $("select[name=\"membros\"]").select2({

@@ -105,7 +105,18 @@ public class PessoaDAO {
             stmt.setLong(1, limit);
             stmt.setLong(2, offset);
             Config.ROWS = Util.countQuery(stmt);
-            System.out.println(stmt);
+            return getPessoas(stmt);
+        }
+    }
+    
+    public static List<Pessoa> funcionarios(String coluna, String ordem, long limit, long offset) throws SQLException {
+        try (
+            java.sql.Connection conn = DriverManager.getConnection(Config.URL);
+            PreparedStatement stmt = conn.prepareStatement(String.format("SELECT p.id, %s FROM pessoa p WHERE p.funcionario = true ORDER BY p.%s %s LIMIT ? OFFSET ?", Util.formatarColunas(COLUNAS_TABELA, "p"), coluna, ordem));
+        ) {
+            stmt.setLong(1, limit);
+            stmt.setLong(2, offset);
+            Config.ROWS = Util.countQuery(stmt);
             return getPessoas(stmt);
         }
     }
@@ -142,6 +153,19 @@ public class PessoaDAO {
         try (
             java.sql.Connection conn = DriverManager.getConnection(Config.URL);
             PreparedStatement stmt = conn.prepareStatement(String.format("SELECT COUNT(p.id) AS qtd FROM pessoa p"))
+        ) {
+            @Cleanup ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getLong("qtd");
+            }
+        }
+        return 0;
+    }
+    
+    public static long qtdFuncionarios() throws SQLException {
+        try (
+            java.sql.Connection conn = DriverManager.getConnection(Config.URL);
+            PreparedStatement stmt = conn.prepareStatement(String.format("SELECT COUNT(p.id) AS qtd FROM pessoa p WHERE p.funcionario = true"))
         ) {
             @Cleanup ResultSet rs = stmt.executeQuery();
             if (rs.next()) {

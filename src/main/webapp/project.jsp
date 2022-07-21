@@ -105,7 +105,7 @@
                 </div>
             </div>
             <jsp:include page="structure/scripts.jsp"/>
-            <jsp:include page="structure/scripts-login.jsp"/>
+            <jsp:include page="structure/script-login.jsp"/>
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
                     // Datatables clients

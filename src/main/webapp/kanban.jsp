@@ -294,7 +294,7 @@
             </div>
         </div>
         <jsp:include page="structure/scripts.jsp"/>
-        <jsp:include page="structure/scripts-login.jsp"/>
+        <jsp:include page="structure/script-login.jsp"/>
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 dragula([document.querySelector("#projetos-pendentes"), document.querySelector("#projetos-em-analise"), document.querySelector("#projetos-analise-realizada"), document.querySelector("#projetos-analise-aprovada"), document.querySelector("#projetos-planejados"), document.querySelector("#projetos-iniciado"), document.querySelector("#projetos-em-andamento"), document.querySelector("#projetos-encerrados"), document.querySelector("#projetos-cancelados")]);

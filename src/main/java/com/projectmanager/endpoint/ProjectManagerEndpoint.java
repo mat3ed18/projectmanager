@@ -40,6 +40,15 @@ public class ProjectManagerEndpoint {
         }
     }
     
+    @GetMapping("/funcionarios")
+    public ResponseEntity<?> listarFuncionarios(@RequestParam Map<String, String> data) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(Util.formatResponse(HttpStatus.OK, data, service.getFuncionarios(data.get("coluna"), data.get("ordem"), data.get("pagina"), data.get("qtd"))));
+        } catch (SQLException | JsonProcessingException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Util.formatException(ex));
+        }
+    }
+    
     @GetMapping("/pessoas/buscar")
     public ResponseEntity<?> buscarPessoas(@RequestParam Map<String, String> data) {
         try {

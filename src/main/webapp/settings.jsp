@@ -95,18 +95,18 @@
                                                     <h5 class="card-title mb-0">Minha Conta</h5>
                                                 </div>
                                                 <div class="card-body">
-                                                    <form>
+                                                    <form id="validation-form" novalidate="novalidate">
                                                         <div class="row">
-                                                            <div class="mb-3 col-md-6">
+                                                            <div class="mb-3 col-md-6 error-placeholder">
                                                                 <label>nome</label>
                                                                 <input class="form-control mt-2" type="text" name="nome" placeholder="Digite seu nome" />
                                                             </div>
-                                                            <div class="mb-3 col-md-6">
+                                                            <div class="mb-3 col-md-6 error-placeholder">
                                                                 <label>cpf</label>
                                                                 <input class="form-control mt-2" type="text" name="cpf" placeholder="Digite seu CPF" data-mask="000.000.000-00" data-reverse="true" autocomplete="off" maxlength="14" />
                                                             </div>
                                                         </div>
-                                                        <div class="mb-3">
+                                                        <div class="mb-3 error-placeholder">
                                                             <label>data de nascimento</label>
                                                             <input class="form-control mt-2" type="date" name="dataNascimento" placeholder="Digite sua data de nascimento" />
                                                         </div>
@@ -154,7 +154,7 @@
                 </div>
             </div>
             <jsp:include page="structure/scripts.jsp"/>
-            <jsp:include page="structure/scripts-login.jsp"/>
+            <jsp:include page="structure/script-login.jsp"/>
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
                     <% if (request.getSession(false).getAttribute("user_id") != null) { %>
@@ -167,6 +167,49 @@
                     <% } else { %>
                         window.location.href = "<%= BASE_URL %>/home";
                     <% } %>
+                });
+            </script>
+            <script>
+                $("#validation-form").validate({
+                    focusInvalid: true,
+                    rules: {
+                        "nome": {
+                            required: true
+                        },
+                        "cpf": {
+                            required: true,
+                            minlength: 14
+                        },
+                        "dataNascimento": {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        "nome": {
+                            required: "Insira o seu nome"
+                        },
+                        "cpf": {
+                            required: "Insira o seu CPF"
+                        },
+                        "dataNascimento": {
+                            required: "Insira a sua data de nascimento"
+                        }
+                    },
+                    // Errors
+                    errorPlacement: function errorPlacement(error, element) {
+                        var $parent = $(element).parents(".error-placeholder");
+                        if ($parent.find(".jquery-validation-error").length) {
+                            return;
+                        }
+                        $parent.append(error.addClass("jquery-validation-error small form-text invalid-feedback"));
+                    },
+                    highlight: function (element) {
+                        var $el = $(element);
+                        var $parent = $el.parents(".error-placeholder");
+                    },
+                    unhighlight: function (element) {
+                        $(element).parents(".error-placeholder").find(".is-invalid").removeClass("is-invalid");
+                    }
                 });
             </script>
         </body>

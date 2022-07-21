@@ -4,6 +4,7 @@
 <% String BASE_URL = Util.getURL(request); %>
 
 <!DOCTYPE html>
+<f:view>
     <html lang="en">
         <head>
             <title>Usuário | Project Manager</title>
@@ -64,7 +65,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <th>Funcionário</th>
-                                                                <td><span class="badge bg-success lh-lg"></span></td>
+                                                                <td><span class="badge bg-success lh-lg" id="boolFuncionario"></span></td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -80,7 +81,7 @@
                 </div>
             </div>
             <jsp:include page="structure/scripts.jsp"/>
-            <jsp:include page="structure/scripts-login.jsp"/>
+            <jsp:include page="structure/script-login.jsp"/>
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
                     // Datatables clients
@@ -99,6 +100,9 @@
                             $("#data_nascimento").html(data.dataNascimento);
                             $("#count_member").html(23);
                             $("#count_manager").html(24);
+                            if (data.funcionario) {
+                                $("#boolFuncionario").html("ATIVO");
+                            }
                         });
                     <% } else { %>
                         window.location.href = "<%= BASE_URL %>/home";
@@ -107,3 +111,4 @@
             </script>
         </body>
     </html>
+</f:view>

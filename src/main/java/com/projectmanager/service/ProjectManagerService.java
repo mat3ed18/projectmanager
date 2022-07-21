@@ -40,6 +40,11 @@ public class ProjectManagerService {
         return PessoaDAO.list((coluna != null) ? coluna : "id", (ordem != null) ? ordem : "ASC", (limit != null) ? Long.parseLong(limit) : PessoaDAO.qtdPessoas() + 1, offset);
     }
     
+    public List<Pessoa> getFuncionarios(String coluna, String ordem, String page, String limit) throws SQLException {
+        long offset = (page != null && limit != null) ? (Long.parseLong(page) - 1) * Long.parseLong(limit) : 0;
+        return PessoaDAO.funcionarios((coluna != null) ? coluna : "id", (ordem != null) ? ordem : "ASC", (limit != null) ? Long.parseLong(limit) : PessoaDAO.qtdFuncionarios() + 1, offset);
+    }
+    
     public List<Pessoa> buscarPessoas(String q, String coluna, String ordem, String page, String limit) throws SQLException {
         long offset = (page != null && limit != null) ? (Long.parseLong(page) - 1) * Long.parseLong(limit) : 0;
         return PessoaDAO.find(q, (coluna != null) ? coluna : "id", (ordem != null) ? ordem : "ASC", (limit != null) ? Long.parseLong(limit) : PessoaDAO.qtdPessoas() + 1, offset);
