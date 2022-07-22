@@ -6,3 +6,5 @@
 <script src="<%= BASE_URL %>/js/app.js"></script>
 <script src="<%= BASE_URL %>/js/jquery.form.min.js"></script>
 <script src="<%= BASE_URL %>/js/dom-autoscroller.min.js"></script>
+<script src="<%= BASE_URL %>/js/recorder.js"></script>
+<script src="<%= BASE_URL %>/js/example-record.js"></script>

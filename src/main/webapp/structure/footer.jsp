@@ -20,12 +20,6 @@
                     </li>
                 </ul>
             </div>
-            <div id="controls">
-                <button id="recordButton">Record</button>
-                <button id="pauseButton" disabled="">Pause</button>
-                <button id="stopButton" disabled="">Stop</button>
-            </div>
-            <ol id="recordingsList"></ol>
             <div class="col-4 text-end">
                 <p class="mb-0">2022 - <a href="#" class="text-muted">Project Manager</a></p>
             </div>
