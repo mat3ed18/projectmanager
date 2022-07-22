@@ -110,8 +110,8 @@
                                                             <label>data de nascimento</label>
                                                             <input class="form-control mt-2" type="date" name="dataNascimento" placeholder="Digite sua data de nascimento" />
                                                         </div>
-                                                        <div class="mb-3">
-                                                            <input id="customControlInline" type="checkbox" class="form-check-input" value="isFuncionario" name="isFuncionario" />
+                                                        <div class="mb-3" id="send-area">
+                                                            <input id="customControlInline" type="checkbox" class="form-check-input" name="isFuncionario" />
                                                             <label class="form-check-label text-small ps-2" for="customControlInline">Sou um funcionário</label>
                                                         </div>
                                                         <button type="submit" class="btn btn-primary">Atualizar</button>
@@ -126,14 +126,13 @@
                                             <div class="card">
                                                 <div class="card-body">
                                                     <h5 class="card-title">Segurança</h5>
-                                                    <form>
+                                                    <div>
                                                         <div class="mb-3">
                                                             <label>Quer apagar a sua conta? Lembre-se que esta ação é irreversí­vel e não pode ser voltada atrás caso haja arrependimento.</label>
-                                                            <label>A exclusão é definitiva e sem volta, mas ao invés de apagar, você pode <a href="#">sair</a> desta conta.</label>
-                                                            <input type="hidden" class="form-control mt-2" name="id" id="inputPasswordNew" />
+                                                            <label>A exclusão é definitiva e sem volta, mas ao invés de apagar, você pode <a href="<%= BASE_URL %>/logout">sair</a> desta conta.</label>
                                                         </div>
-                                                        <button type="submit" class="btn btn-danger">Deletar minha conta</button>
-                                                    </form>
+                                                        <button class="btn btn-danger">Deletar minha conta</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -159,6 +158,7 @@
                 document.addEventListener("DOMContentLoaded", function () {
                     <% if (request.getSession(false).getAttribute("user_id") != null) { %>
                         $.get("<%= BASE_URL %>/projectmanager/pessoa", {id: "<%= request.getSession(false).getAttribute("user_id") %>"}, function (data) {
+                            $("#send-area").append("<input type='hidden' name='id' value='" + data.id + "'>");
                             $("input[name='nome']").val(data.nome);
                             $("input[name='cpf']").val(data.cpf);
                             $("input[name='dataNascimento']").val(data.dataNascimento);
@@ -210,6 +210,26 @@
                     unhighlight: function (element) {
                         $(element).parents(".error-placeholder").find(".is-invalid").removeClass("is-invalid");
                     }
+                });
+            </script>
+            <script>
+                $("form").on("submit", function (e) {
+                    e.preventDefault();
+                    if ($(this).validate().errorList.length == 0) {
+                        $(this).ajaxSubmit({
+                            url: "<%= BASE_URL %>/projectmanager/pessoa/atualizar",
+                            type: "PUT",
+                            success: function (data, statusText, jqXHR) {
+                                toastr["success"](data.mensagem, "", { positionClass: "toast-top-full-width", closeButton: true, progressBar: true, newestOnTop: false, timeOut: 2000, onHidden: function () {
+                                   window.location.href = "<%= BASE_URL %>/settings";
+                                }});
+                            },
+                            error: function (jqXHR, statusText, error) {
+                                toastr["error"]("" + jqXHR.responseJSON.message + "", "ERRO", { positionClass: "toast-top-full-width", closeButton: true, progressBar: true, newestOnTop: false, timeOut: 2000 });
+                            }
+                        });
+                    }
+                    return false;
                 });
             </script>
         </body>

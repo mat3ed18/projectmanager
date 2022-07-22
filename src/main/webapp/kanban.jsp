@@ -71,20 +71,7 @@
                                             <h5 class="card-title btn bg-dark bg-opacity-50 text-white rounded-pill my-0 mx-0">pendente</h5>
                                         </div>
                                         <div class="card-body py-0 px-3.5 pb-3">
-                                            <div id="projetos-pendentes">
-
-                                                <div class="card mb-3 bg-dark bg-opacity-10 cursor-grab">
-                                                    <div class="card-body p-3">
-                                                        <p>Projeto 1</p>
-                                                        <div class="float-end mt-n1">
-                                                            <img src="../img/avatars/user.png" width="32" height="32" class="rounded-circle" alt="Avatar" />
-                                                        </div>
-                                                        <a class="btn btn-primary btn-sm" href="#">Ver</a>
-                                                        <a class="btn btn-primary btn-sm" href="#">Editar</a>
-                                                        <a class="btn btn-danger btn-sm" href="#">Excluir</a>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <div id="projetos-pendentes" data-status="" data-class="bg-dark bg-opacity-10"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -97,20 +84,7 @@
                                             <h5 class="card-title btn bg-gold text-dark rounded-pill my-0 mx-0">em análise</h5>
                                         </div>
                                         <div class="card-body py-0 px-3.5 pb-3">
-                                            <div id="projetos-em-analise">
-
-                                                <div class="card mb-3 bg-warning bg-opacity-25 cursor-grab">
-                                                    <div class="card-body p-3">
-                                                        <p>Projeto 2</p>
-                                                        <div class="float-end mt-n1">
-                                                            <img src="../img/avatars/user.png" width="32" height="32" class="rounded-circle" alt="Avatar" />
-                                                        </div>
-                                                        <a class="btn btn-primary btn-sm" href="#">Ver</a>
-                                                        <a class="btn btn-primary btn-sm" href="#">Editar</a>
-                                                        <a class="btn btn-danger btn-sm" href="#">Excluir</a>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <div id="projetos-em-analise" data-status="em análise" data-class="bg-warning bg-opacity-25"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -123,24 +97,11 @@
                                             <h5 class="card-title btn bg-primary-light text-white rounded-pill my-0 mx-0">análise realizada</h5>
                                         </div>
                                         <div class="card-body py-0 px-3.5 pb-3">
-                                            <div id="projetos-analise-realizada">
-
-                                                <div class="card mb-3 bg-primary bg-opacity-10 cursor-grab">
-                                                    <div class="card-body p-3">
-                                                        <p>Projeto 3</p>
-                                                        <div class="float-end mt-n1">
-                                                            <img src="../img/avatars/user.png" width="32" height="32" class="rounded-circle" alt="Avatar" />
-                                                        </div>
-                                                        <a class="btn btn-primary btn-sm" href="#">Ver</a>
-                                                        <a class="btn btn-primary btn-sm" href="#">Editar</a>
-                                                        <a class="btn btn-danger btn-sm" href="#">Excluir</a>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <div id="projetos-analise-realizada" data-status="análise realizada" data-class="bg-primary bg-opacity-10"></div>
                                         </div>
                                     </div>
                                 </div>
-
+                                
                                 <!-- COLUNA DO TRELLO #projetos-analise-aprovada -->
 
                                 <div class="col-12 col-lg-6 col-xl-3 coluna-projetos">
@@ -149,20 +110,7 @@
                                             <h5 class="card-title btn bg-primary text-white rounded-pill my-0 mx-0">análise aprovada</h5>
                                         </div>
                                         <div class="card-body py-0 px-3.5 pb-3">
-                                            <div id="projetos-analise-aprovada">
-
-                                                <div class="card mb-3 bg-primary bg-opacity-25 cursor-grab">
-                                                    <div class="card-body p-3">
-                                                        <p>Projeto 4</p>
-                                                        <div class="float-end mt-n1">
-                                                            <img src="../img/avatars/user.png" width="32" height="32" class="rounded-circle" alt="Avatar" />
-                                                        </div>
-                                                        <a class="btn btn-primary btn-sm" href="#">Ver</a>
-                                                        <a class="btn btn-primary btn-sm" href="#">Editar</a>
-                                                        <a class="btn btn-danger btn-sm" href="#">Excluir</a>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <div id="projetos-analise-aprovada" data-status="análise aprovada" data-class="bg-primary bg-opacity-25"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -175,20 +123,7 @@
                                             <h5 class="card-title btn bg-secondary-light text-white rounded-pill my-0 mx-0">planejado</h5>
                                         </div>
                                         <div class="card-body py-0 px-3.5 pb-3">
-                                            <div id="projetos-planejados">
-
-                                                <div class="card mb-3 bg-secondary bg-opacity-10 cursor-grab">
-                                                    <div class="card-body p-3">
-                                                        <p>Projeto 5</p>
-                                                        <div class="float-end mt-n1">
-                                                            <img src="../img/avatars/user.png" width="32" height="32" class="rounded-circle" alt="Avatar" />
-                                                        </div>
-                                                        <a class="btn btn-primary btn-sm" href="#">Ver</a>
-                                                        <a class="btn btn-primary btn-sm" href="#">Editar</a>
-                                                        <a class="btn btn-danger btn-sm" href="#">Excluir</a>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <div id="projetos-planejados" data-status="planejado" data-class="bg-secondary bg-opacity-10"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -201,19 +136,7 @@
                                             <h5 class="card-title btn bg-secondary text-white rounded-pill my-0 mx-0">iniciado</h5>
                                         </div>
                                         <div class="card-body py-0 px-3.5 pb-3">
-                                            <div id="projetos-iniciado">
-
-                                                <div class="card mb-3 bg-secondary bg-opacity-25 cursor-grab">
-                                                    <div class="card-body p-3">
-                                                        <p>Projeto 6</p>
-                                                        <div class="float-end mt-n1">
-                                                            <img src="../img/avatars/user.png" width="32" height="32" class="rounded-circle" alt="Avatar" />
-                                                        </div>
-                                                        <a class="btn btn-primary btn-sm" href="#">Ver</a>
-                                                        <a class="btn btn-primary btn-sm" href="#">Editar</a>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <div id="projetos-iniciado" data-status="iniciado" data-class="bg-secondary bg-opacity-25"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -226,19 +149,7 @@
                                             <h5 class="card-title btn bg-success-light text-white rounded-pill my-0 mx-0">em andamento</h5>
                                         </div>
                                         <div class="card-body py-0 px-3.5 pb-3">
-                                            <div id="projetos-em-andamento">
-
-                                                <div class="card mb-3 bg-success bg-opacity-10 cursor-grab">
-                                                    <div class="card-body p-3">
-                                                        <p>Projeto 7</p>
-                                                        <div class="float-end mt-n1">
-                                                            <img src="../img/avatars/user.png" width="32" height="32" class="rounded-circle" alt="Avatar" />
-                                                        </div>
-                                                        <a class="btn btn-primary btn-sm" href="#">Ver</a>
-                                                        <a class="btn btn-primary btn-sm" href="#">Editar</a>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <div id="projetos-em-andamento" data-status="em andamento" data-class="bg-success bg-opacity-10"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -251,19 +162,7 @@
                                             <h5 class="card-title btn bg-success-dark text-white rounded-pill my-0 mx-0">encerrado</h5>
                                         </div>
                                         <div class="card-body py-0 px-3.5 pb-3">
-                                            <div id="projetos-encerrados">
-
-                                                <div class="card mb-3 bg-success bg-opacity-25 cursor-grab">
-                                                    <div class="card-body p-3">
-                                                        <p>Projeto 8</p>
-                                                        <div class="float-end mt-n1">
-                                                            <img src="../img/avatars/user.png" width="32" height="32" class="rounded-circle" alt="Avatar" />
-                                                        </div>
-                                                        <a class="btn btn-primary btn-sm" href="#">Ver</a>
-                                                        <a class="btn btn-primary btn-sm" href="#">Editar</a>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <div id="projetos-encerrados" data-status="encerrado" data-class="bg-success bg-opacity-25"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -276,20 +175,7 @@
                                             <h5 class="card-title btn btn-danger text-white rounded-pill my-0 mx-0">cancelado</h5>
                                         </div>
                                         <div class="card-body py-0 px-3.5 pb-3">
-                                            <div id="projetos-cancelados">
-
-                                                <div class="card mb-3 bg-danger bg-opacity-10 cursor-grab">
-                                                    <div class="card-body p-3">
-                                                        <p>Projeto 9</p>
-                                                        <div class="float-end mt-n1">
-                                                            <img src="../img/avatars/user.png" width="32" height="32" class="rounded-circle" alt="Avatar" />
-                                                        </div>
-                                                        <a class="btn btn-primary btn-sm" href="#">Ver</a>
-                                                        <a class="btn btn-primary btn-sm" href="#">Editar</a>
-                                                        <a class="btn btn-danger btn-sm" href="#">Excluir</a>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <div id="projetos-cancelados" data-status="cancelado" data-class="bg-danger bg-opacity-10"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -301,9 +187,46 @@
             </div>
             <jsp:include page="structure/scripts.jsp"/>
             <jsp:include page="structure/script-login.jsp"/>
+            <script src="js/kanban.js"></script>
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
-                    dragula([document.querySelector("#projetos-pendentes"), document.querySelector("#projetos-em-analise"), document.querySelector("#projetos-analise-realizada"), document.querySelector("#projetos-analise-aprovada"), document.querySelector("#projetos-planejados"), document.querySelector("#projetos-iniciado"), document.querySelector("#projetos-em-andamento"), document.querySelector("#projetos-encerrados"), document.querySelector("#projetos-cancelados")]);
+                    var scroll = autoScroll([
+                        document.querySelector(".columns-kanban")
+                    ], {
+                        margin: 30,
+                        maxSpeed: 50,
+                        scrollWhenOutside: true,
+                        autoScroll: function () {
+                            return this.down
+                        }
+                    });
+                    
+                    dragula([document.querySelector("#projetos-pendentes"), document.querySelector("#projetos-em-analise"), document.querySelector("#projetos-analise-realizada"), document.querySelector("#projetos-analise-aprovada"), document.querySelector("#projetos-planejados"), document.querySelector("#projetos-iniciado"), document.querySelector("#projetos-em-andamento"), document.querySelector("#projetos-encerrados"), document.querySelector("#projetos-cancelados")]).on('drop', function (el) {
+                        var card = $(el);
+                        var main = card.parent();
+                        card.attr("class", "card mb-3 " + main.attr("data-class"));
+                        
+                        if (card.find(".btn-danger").length == 0) {
+                            card.find(".card-body").append('<a class="btn btn-danger btn-sm">Excluir</a>');
+                        }
+                        
+                        if (main.attr("data-status").match("iniciado|em andamento|encerrado")) {
+                            card.find(".card-body .btn-danger").remove();
+                        }
+                        
+                        $.ajax({
+                            url: "<%= BASE_URL %>/projectmanager/projeto/atualizar/status",
+                            type: "PUT",
+                            dataType: "json",
+                            data: {
+                                id: card.attr("data-id"),
+                                status: main.attr("data-status")
+                            }, 
+                            success: function (data) {
+                                toastr["success"]("", data.mensagem, { positionClass: "toast-bottom-right", closeButton: false, progressBar: true, newestOnTop: false, timeOut: 1000 });
+                            }
+                        });
+                    });
                 });
             </script>
         </body>

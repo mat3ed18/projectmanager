@@ -4,9 +4,15 @@ import com.projectmanager.database.postgresql.dao.PessoaDAO;
 import com.projectmanager.database.postgresql.dao.ProjetoDAO;
 import com.projectmanager.model.Pessoa;
 import com.projectmanager.model.Projeto;
+import com.projectmanager.util.Request;
+import com.projectmanager.util.RequestResponse;
+import static com.projectmanager.util.Util.disableLogs;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service("ProjectManager")
 public class ProjectManagerService {
@@ -24,6 +30,7 @@ public class ProjectManagerService {
     }
     
     public int delete(Pessoa pessoa) throws SQLException {
+        ProjetoDAO.removerTodos(pessoa);
         return PessoaDAO.delete(pessoa);
     }
     
@@ -60,8 +67,15 @@ public class ProjectManagerService {
         return ProjetoDAO.update(projeto);
     }
     
+    public int update(long idProjeto, String status) throws SQLException {
+        return ProjetoDAO.update(idProjeto, status);
+    }
+    
     public int delete(Projeto projeto) throws SQLException {
-        if (!projeto.getStatus().matches("iniciado|em andamento|encerrado")) return ProjetoDAO.delete(projeto);
+        if (!projeto.getStatus().matches("iniciado|em andamento|encerrado")) {
+            ProjetoDAO.removerTodos(projeto);
+            return ProjetoDAO.delete(projeto);
+        }
         else return 0;
     }
     
@@ -108,7 +122,7 @@ public class ProjectManagerService {
     
     public List<Projeto> getProjects(String pessoaId, String coluna, String ordem, String page, String limit) throws SQLException {
         long offset = (page != null && limit != null) ? (Long.parseLong(page) - 1) * Long.parseLong(limit) : 0;
-        return ProjetoDAO.listarProjetos(PessoaDAO.get(Long.parseLong(pessoaId)), (coluna != null) ? coluna : "id", (ordem != null) ? ordem : "ASC", (limit != null) ? Long.parseLong(limit) : ProjetoDAO.totalProjetosMembro(Long.parseLong(pessoaId)), offset);
+        return ProjetoDAO.listarProjetos(PessoaDAO.get(Long.parseLong(pessoaId)), (coluna != null) ? coluna : "id", (ordem != null) ? ordem : "ASC", (limit != null) ? Long.parseLong(limit) : ProjetoDAO.totalProjetos(Long.parseLong(pessoaId)), offset);
     }
     
     public List<Pessoa> findMembers(String q, String projetoId, String coluna, String ordem, String page, String limit) throws SQLException {
@@ -118,6 +132,23 @@ public class ProjectManagerService {
     
     public List<Projeto> findProjects(String q, String pessoaId, String coluna, String ordem, String page, String limit) throws SQLException {
         long offset = (page != null && limit != null) ? (Long.parseLong(page) - 1) * Long.parseLong(limit) : 0;
-        return ProjetoDAO.buscarProjetos(q, PessoaDAO.get(Long.parseLong(pessoaId)), (coluna != null) ? coluna : "id", (ordem != null) ? ordem : "ASC", (limit != null) ? Long.parseLong(limit) : ProjetoDAO.totalProjetosMembro(Long.parseLong(pessoaId)), offset);
+        return ProjetoDAO.buscarProjetos(q, PessoaDAO.get(Long.parseLong(pessoaId)), (coluna != null) ? coluna : "id", (ordem != null) ? ordem : "ASC", (limit != null) ? Long.parseLong(limit) : ProjetoDAO.totalProjetos(Long.parseLong(pessoaId)), offset);
+    }
+    
+    public String recognition(MultipartFile audio) throws IOException {
+        disableLogs();
+        Request request = new Request();
+        byte[] encodedAudio = Base64.encodeBase64(audio.getBytes());
+        String token = "AIzaSyBgMtO1uopLrub7KRiIgNUq3N7yHSJHCBs";
+        
+        request.setCharsetUTF8();
+        
+        request.addHeader("Content-Type", "application/json; charset=utf-8");
+        request.addHeader("Authorization", "Bearer " + token);
+        request.setBody("{\"config\": {\"encoding\":\"FLAC\",\"sampleRateHertz\":16000,\"languageCode\":\"pt-BR\"},\"audio\": {\"content\": \"" + encodedAudio + "\"}}");
+        
+        RequestResponse requestResponse = request.execPostRequest("https://speech.googleapis.com/v1/speech:recognize");
+        
+        return requestResponse.getBody();
     }
 }

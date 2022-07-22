@@ -57,14 +57,13 @@ public class ViewResolver {
     @RequestMapping("/project/{id}")
     public String project(@PathVariable String id, ModelMap modelMap) {
         modelMap.put("id", id);
-        modelMap.put("editar", "true");
         return "/project.jsp";
     }
     
     @RequestMapping("/project/{id}/edit")
     public String edit(@PathVariable String id, ModelMap modelMap, HttpServletRequest request) {
         modelMap.put("id", id);
-        modelMap.put("editar", "false");
+        modelMap.put("editar", true);
         return "/add.jsp";
     }
     
@@ -83,5 +82,10 @@ public class ViewResolver {
     public String logout(HttpServletRequest request) {
         request.getSession().invalidate();
         return "/login.jsp";
+    }
+    
+    @RequestMapping({"/project", "/user", "/project/edit"})
+    public String redirect() {
+        return "redirect:/home";
     }
 }

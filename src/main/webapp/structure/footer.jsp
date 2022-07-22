@@ -20,9 +20,29 @@
                     </li>
                 </ul>
             </div>
+            <div id="controls">
+                <button id="recordButton">Record</button>
+                <button id="pauseButton" disabled="">Pause</button>
+                <button id="stopButton" disabled="">Stop</button>
+            </div>
+            <ol id="recordingsList"></ol>
             <div class="col-4 text-end">
                 <p class="mb-0">2022 - <a href="#" class="text-muted">Project Manager</a></p>
             </div>
         </div>
     </div>
+    <button id="buttonRecorder" class="btn btn-lg btn-danger"><i class="fas fa-microphone"></i></button>
+    <style>
+        #buttonRecorder {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            margin-right: 1%;
+            margin-bottom: 1%;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.4em;
+        }
+    </style>
 </footer>

@@ -28,13 +28,13 @@
                         <div class="container-fluid">
                             <div class="header">
                                 <h1 class="header-title">
-                                    Adicionar Projeto
+                                    <%= (request.getAttribute("editar") != null) ? "Editar" : "Adicionar" %> Projeto
                                 </h1>
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="<%= BASE_URL %>/home">Project Manager</a></li>
                                         <li class="breadcrumb-item"><a href="#">Projeto</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">Adicionar</li>
+                                        <li class="breadcrumb-item active" aria-current="page"><%= (request.getAttribute("editar") != null) ? "Editar" : "Adicionar" %></li>
                                     </ol>
                                 </nav>
                             </div>
@@ -89,7 +89,7 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-12 mb-3">
+                                                <div class="col-12 mb-3" id="send-area">
                                                     <button type="submit" class="btn btn-primary">Submit</button>
                                                 </div>
                                             </form>
@@ -204,38 +204,16 @@
                         placeholder: "Escreva a descrição do projeto",
                         theme: "snow"
                     });
-
-                    $(document).on("keyup", "#editor", function () {
-                        var html = editor.root.innerHTML;
-                        $("#descricao").val(html);
-                    });
                     
-                    $("form").on("submit", function (e) {
-                        e.preventDefault();
-                        if ($(this).validate().errorList.length == 0) {
-                            $(this).ajaxSubmit({
-                                url: "<%= BASE_URL %>/projectmanager/projeto/salvar",
-                                type: "POST",
-                                success: function (data, statusText, jqXHR) {
-                                    toastr["success"]("O projeto foi cadastrado com sucesso!", "", { positionClass: "toast-top-full-width", closeButton: true, progressBar: true, newestOnTop: false, timeOut: 2000, onHidden: function () {
-                                        window.location.href = "<%= BASE_URL %>/projects";
-                                    }});
-                                },
-                                error: function (jqXHR, statusText, error) {
-                                    toastr["error"]("" + jqXHR.responseJSON.message + "", "ERRO", { positionClass: "toast-top-full-width", closeButton: true, progressBar: true, newestOnTop: false, timeOut: 2000 });
-                                }
-                            });
-                        }
-                        return false;
-                    });
-                });
-            </script>
-            <script>
-                document.addEventListener("DOMContentLoaded", function () {
                     $.get("<%= BASE_URL %>/projectmanager/funcionarios", {}, function (data) {
                         for (var i = 0; i < data.results.length; i++) {
                             $("select[name='s_gerente'], select[name='s_membros']").append("<option value='" + data.results[i].id + "'>" + data.results[i].nome + "</option>");
                         }
+                    });
+
+                    $(document).on("keyup", "#editor", function () {
+                        var html = editor.root.innerHTML;
+                        $("#descricao").val(html);
                     });
                     
                     $("select[name=\"s_membros\"]").select2({
@@ -252,6 +230,37 @@
                     }).change(function() {
                         $(this).valid();
                     });
+                    
+                    <% if (request.getAttribute("editar") != null) { %>
+                        
+                        $.get("<%= BASE_URL %>/projectmanager/projeto/membros", {projetoId: "<%= request.getAttribute("id") %>"}, function (data) {
+                            var selected = [];
+                            for (var i = 0; i < data.results.length; i++) {
+                                selected.push(data.results[i].id + "");
+                            }
+                            
+                            setTimeout(function(){
+                                $("select[name=\"s_membros\"]").val(selected);
+                                $("select[name=\"s_membros\"]").select2();
+                            }, 2000);
+                        });
+                        
+                        $.get("<%= BASE_URL %>/projectmanager/projeto", {id: "<%= request.getAttribute("id") %>"}, function (data) {
+                            $("#send-area").prepend("<input type='hidden' name='id' value='" + data.id + "'>");
+                            $("input[name='nome']").val(data.nome);
+                            $("input[name='orcamento']").val(data.orcamento);
+                            editor.root.innerHTML = data.descricao;
+                            $("input[name='descricao']").val(data.descricao);
+                            $("input[name='dataInicio']").val(data.dataInicio);
+                            $("input[name='dataPrevisaoFim']").val(data.dataPrevisaoFim);
+                            $("input[name='dataFim']").val(data.dataFim);
+                            setTimeout(function(){
+                                $("select[name=\"s_gerente\"]").val(data.gerente.id + "");
+                                $("select[name=\"s_gerente\"]").select2();
+                            }, 2000);
+                        });
+                        
+                    <% } %>
 
                     // Trigger validation on tagsinput change
                     $("input[name=\"validation-bs-tagsinput\"]").on("itemAdded itemRemoved", function() {
@@ -264,6 +273,29 @@
 
                     $(".select2-search__field").css({
                         marginTop: "-10%"
+                    });
+                    
+                    $("form").on("submit", function (e) {
+                        e.preventDefault();
+                        if ($(this).validate().errorList.length == 0) {
+                            $(this).ajaxSubmit({
+                                url: "<%= BASE_URL %>/projectmanager/projeto/<%= (request.getAttribute("editar") != null) ? "atualizar" : "salvar" %>",
+                                type: "<%= (request.getAttribute("editar") != null) ? "PUT" : "POST" %>",
+                                success: function (data, statusText, jqXHR) {
+                                    toastr["success"]("O projeto foi <%= (request.getAttribute("editar") != null) ? "atualizado" : "cadastrado" %> com sucesso!", "", { positionClass: "toast-top-full-width", closeButton: true, progressBar: true, newestOnTop: false, timeOut: 2000, onHidden: function () {
+                                        var id = "<%= (request.getAttribute("id") != null) ? request.getAttribute("id") : "" %>";
+                                        if (typeof data.id !== "undefined") {
+                                            id = data.id + "";
+                                        }
+                                        window.location.href = "<%= BASE_URL %>/project/" + id;
+                                    }});
+                                },
+                                error: function (jqXHR, statusText, error) {
+                                    toastr["error"]("" + jqXHR.responseJSON.message + "", "ERRO", { positionClass: "toast-top-full-width", closeButton: true, progressBar: true, newestOnTop: false, timeOut: 2000 });
+                                }
+                            });
+                        }
+                        return false;
                     });
                 });
             </script>

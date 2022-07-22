@@ -72,6 +72,8 @@
             </div>
             <jsp:include page="structure/scripts.jsp"/>
             <jsp:include page="structure/script-login.jsp"/>
+            <script src="js/recorder.js"></script>
+            <script src="js/example-record.js"></script>
         </body>
     </html>
 </f:view>

@@ -46,9 +46,9 @@
                                                 </div>
                                             </div>
 
-                                            <table class="table table-striped table-lg table-responsive my-2">
+                                            <table class="table table-lg table-responsive my-4">
                                                 <tbody>
-                                                    <tr class="text-center">
+                                                    <tr class="text-center table-primary">
                                                         <th colspan="2">INFORMAÇÕES</th>
                                                     </tr>
                                                     <tr>
@@ -73,14 +73,17 @@
                                                     </tr>
                                                     <tr>
                                                         <th>Status</th>
-                                                        <td><span class="badge bg-success" id="status"></span></td>
+                                                        <td id="status"></td>
                                                     </tr>
                                                     <tr>
                                                         <th>Risco</th>
-                                                        <td><span class="badge bg-danger me-2" id="risco">ALTO</span></td>
+                                                        <td id="risco"></td>
                                                     </tr>
                                                     <tr>
-                                                        <th colspan="2">Membros</th>
+                                                        <th colspan="2" class="text-center table-primary">MEMBROS</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2" class="p-0 pt-3 pb-3"><table id="example" class="table table-striped dataTable no-footer dtr-inline" style="width:100%"></table></td>
                                                     </tr>
                                                     <tr class="text-center">
                                                         <td colspan="2">
@@ -103,7 +106,6 @@
             <jsp:include page="structure/script-login.jsp"/>
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
-                <% if (request.getAttribute("id") != null) { %>
                     $.get("<%= BASE_URL %>/projectmanager/projeto", {id: "<%= request.getAttribute("id") %>"}, function (data) {
                         $("#edit").attr("href", "<%= BASE_URL %>/project/" + data.id + "/edit");
                         $("#nome").html(data.nome);
@@ -117,9 +119,29 @@
                         $("#status").html(data.status);
                         $("#risco").html(data.risco);
                     });
-                <% } else { %>
-                    window.location.href = "<%= BASE_URL %>/home";
-                <% } %>
+                    
+                    $.get("<%= BASE_URL %>/projectmanager/projeto/membros", {projetoId: "<%= request.getAttribute("id") %>"}, function (data) {
+                        var dataSet = [];
+                        
+                        for (var i = 0; i < data.results.length; i++) {
+                            data.results[i].nome = "<a href='<%= BASE_URL %>/user/" + data.results[i].id + "'>" + data.results[i].nome + "</a>";
+                            dataSet.push([data.results[i].id, data.results[i].nome, data.results[i].cpf, data.results[i].dataNascimento.formatDate()]);
+                        }
+                        
+                        var datatablesMulti = $("#example").DataTable({
+                            responsive: true,
+                            select: {
+                                style: "multi",
+                            },
+                            data: dataSet, 
+                            columns: [
+                                { title: 'id' },
+                                { title: 'nome' },
+                                { title: 'cpf' },
+                                { title: 'data de nascimento' }
+                            ]
+                        });
+                    });
                 });
             </script>
         </body>

@@ -1,13 +1,10 @@
 package com.projectmanager.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.projectmanager.config.Config;
-import com.projectmanager.controller.ProjectManagerController;
 import com.projectmanager.database.postgresql.dao.PessoaDAO;
 import com.projectmanager.database.postgresql.dao.ProjetoDAO;
 import com.projectmanager.model.Pessoa;
@@ -27,9 +24,11 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import static java.time.temporal.ChronoUnit.DAYS;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -37,11 +36,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Set;
 import org.springframework.http.HttpStatus;
 
 public class Util {
+    
+    public static void main(String[] args) throws IOException {
+        
+    }
     
     public static ArrayList<String> getKeys(ObjectNode json) {
         Iterator<Entry<String, JsonNode>> nodes = json.fields();
@@ -53,6 +55,15 @@ public class Util {
         }};
         Collections.sort(keys);
         return keys;
+    }
+    
+    public static void disableLogs() {
+        Set<String> artifactoryLoggers = new HashSet<>(Arrays.asList("org.apache.http"));
+        for(String log:artifactoryLoggers) {
+            ch.qos.logback.classic.Logger artLogger = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory.getLogger(log);
+            artLogger.setLevel(ch.qos.logback.classic.Level.INFO);
+            artLogger.setAdditive(false);
+        }
     }
     
     public static ObjectNode formatException(Exception ex) {

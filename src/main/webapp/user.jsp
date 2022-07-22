@@ -57,13 +57,6 @@
                                                                 <td id="data_nascimento"></td>
                                                             </tr>
                                                             <tr>
-                                                                <th>Projetos</th>
-                                                                <td class="lh-lg">
-                                                                    <b id="count_member"></b> projetos <span class="badge bg-light-dark text-black ms-1">MEMBRO</span><br>
-                                                                    <b id="count_manager"></b> projetos <span class="badge bg-dark-light ms-1 mt-1">GERENTE</span>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
                                                                 <th>Funcionário</th>
                                                                 <td><span class="badge bg-success lh-lg" id="boolFuncionario"></span></td>
                                                             </tr>
@@ -93,20 +86,16 @@
             </script>
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
-                    <% if (request.getAttribute("id") != null) { %>
-                        $.get("<%= BASE_URL %>/projectmanager/pessoa", {id: "<%= request.getAttribute("id") %>"}, function (data) {
-                            $("#nome, td#nome").html(data.nome);
-                            $("#CPF").html(data.cpf);
-                            $("#data_nascimento").html(data.dataNascimento);
-                            $("#count_member").html(23);
-                            $("#count_manager").html(24);
-                            if (data.funcionario) {
-                                $("#boolFuncionario").html("ATIVO");
-                            }
-                        });
-                    <% } else { %>
-                        window.location.href = "<%= BASE_URL %>/home";
-                    <% } %>
+                    $.get("<%= BASE_URL %>/projectmanager/pessoa", {id: "<%= request.getAttribute("id") %>"}, function (data) {
+                        $("#nome, td#nome").html(data.nome);
+                        $("#CPF").html(data.cpf);
+                        $("#data_nascimento").html(data.dataNascimento.formatDate());
+                        $("#count_member").html(23);
+                        $("#count_manager").html(24);
+                        if (data.funcionario) {
+                            $("#boolFuncionario").html("ATIVO");
+                        }
+                    });
                 });
             </script>
         </body>

@@ -22,8 +22,14 @@ import com.projectmanager.util.Util;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.commons.codec.binary.Base64;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping(value = "/projectmanager", produces = "application/json")
@@ -139,7 +145,17 @@ public class ProjectManagerController {
             for (String idMembro : idMembros) {
                 service.associate(projeto.getId(), Long.parseLong(idMembro));
             }
-            return ResponseEntity.status(HttpStatus.OK).body("{\"mensagem\": O usuário foi atualizado com sucesso}");
+            return ResponseEntity.status(HttpStatus.OK).body("{\"mensagem\": \"O usuário foi atualizado com sucesso\"}");
+        } catch (SQLException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Util.formatException(ex));
+        }
+    }
+    
+    @PutMapping("/projeto/atualizar/status")
+    public ResponseEntity<?> update(@RequestParam("id") String id, @RequestParam("status") String status) {
+        try {
+            service.update(Long.parseLong(id), status);
+            return ResponseEntity.status(HttpStatus.OK).body("{\"mensagem\": \"O cartão foi movido com sucesso\"}");
         } catch (SQLException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Util.formatException(ex));
         }
@@ -250,6 +266,15 @@ public class ProjectManagerController {
             }
             
         } catch (SQLException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Util.formatException(ex));
+        }
+    }
+    
+    @PostMapping("/speech")
+    public ResponseEntity<?> create(@RequestParam(value = "audio") MultipartFile audio) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(service.recognition(audio));
+        } catch (IOException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Util.formatException(ex));
         }
     }

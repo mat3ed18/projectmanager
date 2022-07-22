@@ -18,7 +18,7 @@ import lombok.Cleanup;
 
 public class ProjetoDAO {
     private static final String COLUNAS_TABELA = "nome, data_inicio, data_previsao_fim, data_fim, descricao, orcamento, idgerente"; // 7
-    private static final String COLUNAS_UPDATE = "p.nome = ?, p.data_inicio = ?, p.data_previsao_fim = ?, p.data_fim = ?, p.descricao = ?, p.status = ?, p.orcamento = ?, p.risco = ?, p.idgerente = ?"; // 9
+    private static final String COLUNAS_UPDATE = "nome = ?, data_inicio = ?, data_previsao_fim = ?, data_fim = ?, descricao = ?, status = ?, orcamento = ?, risco = ?, idgerente = ?"; // 9
     
     public static long insert(Projeto projeto) throws SQLException {
         try (
@@ -45,7 +45,7 @@ public class ProjetoDAO {
     public static int update(Projeto projeto) throws SQLException {
         try (
             java.sql.Connection conn = DriverManager.getConnection(Config.URL);
-            PreparedStatement stmt = conn.prepareStatement("UPDATE projeto p SET " + COLUNAS_UPDATE + " WHERE p.id = ?");
+            PreparedStatement stmt = conn.prepareStatement("UPDATE projeto SET " + COLUNAS_UPDATE + " WHERE id = ?");
         ) {
             stmt.setString(1, projeto.getNome());
             stmt.setDate(2, Date.valueOf(projeto.getDataInicio().toString()));
@@ -57,6 +57,19 @@ public class ProjetoDAO {
             stmt.setString(8, projeto.getRisco());
             stmt.setLong(9, projeto.getGerente().getId());
             stmt.setLong(10, projeto.getId());
+            
+            return stmt.executeUpdate();
+        }
+    }
+    
+    public static int update(long idProjeto, String status) throws SQLException {
+        try (
+            java.sql.Connection conn = DriverManager.getConnection(Config.URL);
+            PreparedStatement stmt = conn.prepareStatement("UPDATE projeto SET status = ? WHERE id = ?");
+        ) {
+            stmt.setString(1, status);
+            stmt.setLong(2, idProjeto);
+            
             return stmt.executeUpdate();
         }
     }
@@ -376,7 +389,7 @@ public class ProjetoDAO {
         return 0;
     }
     
-    public static long totalProjetosMembro(long idPessoa) throws SQLException {
+    public static long totalProjetos(long idPessoa) throws SQLException {
         try (
             java.sql.Connection conn = DriverManager.getConnection(Config.URL);
             PreparedStatement stmt = conn.prepareStatement(String.format("SELECT COUNT(m.idprojeto) AS qtd FROM membros m WHERE m.idpessoa = ?"))
@@ -388,6 +401,24 @@ public class ProjetoDAO {
             }
         }
         return 0;
+    }
+    
+    public static long totalProjetosGerente(long idPessoa) throws SQLException {
+        try (
+            java.sql.Connection conn = DriverManager.getConnection(Config.URL);
+            PreparedStatement stmt = conn.prepareStatement(String.format("SELECT COUNT(p.id) AS qtd FROM projeto p WHERE p.idgerente = ?"))
+        ) {
+            stmt.setLong(1, idPessoa);
+            @Cleanup ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getLong("qtd");
+            }
+        }
+        return 0;
+    }
+    
+    public static long totalProjetosMembro(long idPessoa) throws SQLException {
+        return totalProjetos(idPessoa) - totalProjetosGerente(idPessoa);
     }
     
     public static long totalMembrosProjeto(long idProjeto) throws SQLException {

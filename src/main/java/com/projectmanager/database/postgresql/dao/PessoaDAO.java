@@ -15,7 +15,7 @@ import lombok.Cleanup;
 
 public class PessoaDAO {
     private static final String COLUNAS_TABELA = "nome, datanascimento, cpf, funcionario"; // 4
-    private static final String COLUNAS_UPDATE = "p.nome = ?, p.datanascimento = ?, p.cpf = ?, p.funcionario = ?"; // 4
+    private static final String COLUNAS_UPDATE = "nome = ?, datanascimento = ?, cpf = ?, funcionario = ?"; // 4
     
     public static long insert(Pessoa pessoa) throws SQLException {
         try (
@@ -38,7 +38,7 @@ public class PessoaDAO {
     public static int update(Pessoa pessoa) throws SQLException {
         try (
             java.sql.Connection conn = DriverManager.getConnection(Config.URL);
-            PreparedStatement stmt = conn.prepareStatement("UPDATE pessoa p SET " + COLUNAS_UPDATE + " WHERE p.id = ?");
+            PreparedStatement stmt = conn.prepareStatement("UPDATE pessoa SET " + COLUNAS_UPDATE + " WHERE id = ?");
         ) {
             stmt.setString(1, pessoa.getNome());
             stmt.setDate(2, Date.valueOf(pessoa.getDataNascimento().toString()));
