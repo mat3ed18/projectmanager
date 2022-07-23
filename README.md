@@ -1,5 +1,5 @@
 # projectmanager
-teste técnico para FullStack Engineer na Desbravador Software
+Teste técnico para FullStack Engineer na Desbravador Software
 
 Este projeto foi ignorado pela empresa na seguinte devolutiva:
 
@@ -17,4 +17,4 @@ http://projectmanager4.herokuapp.com/
 
 O spoiler do projectmanager foi esse, deixo a tarefa de conhecê-lo no link acima e de prestigiar o meu trabalho nas suas mãos.
 
-vendo o link acima, qual nota você daria para este projeto? ☺️🤔
+Vendo o link acima, qual nota você daria para este projeto? ☺️🤔
