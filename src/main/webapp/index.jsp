@@ -27,7 +27,7 @@
                                 <h1 class="header-title">
                                     Project Manager
                                 </h1>
-                                <p class="header-subtitle ">Você está logado no Project Manager como</p>
+                                <p class="header-subtitle user">Você está logado no Project Manager como</p>
                             </div>
 
                             <div class="row">
