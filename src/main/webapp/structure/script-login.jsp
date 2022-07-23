@@ -9,7 +9,7 @@
             $.get("<%= BASE_URL %>/projectmanager/pessoa", {id: "<%= request.getSession(false).getAttribute("user_id") %>"}, function (data) {
                 $("#username").html(data.nome);
                 $(".header-subtitle.user").html($(".header-subtitle.user").html() + " <b>" + data.nome + "</b>");
-                $("#link_profile").attr("href", $("#link_profile").attr("href") + "/" + data.id);
+                $("* #link_profile").attr("href", $("#link_profile").attr("href") + "/" + data.id);
             });
         <% } else { %>
             window.location.href = "<%= BASE_URL %>/";
