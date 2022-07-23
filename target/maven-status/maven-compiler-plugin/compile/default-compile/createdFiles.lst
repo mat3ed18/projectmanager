@@ -24,12 +24,15 @@ com\projectmanager\model\Pessoa.class
 com\projectmanager\database\postgresql\dao\ProjetoDAO$1$3.class
 com\projectmanager\database\postgresql\dao\ProjetoDAO$4$2.class
 com\projectmanager\util\Util$2.class
+com\projectmanager\util\Request$1.class
 com\projectmanager\config\Config.class
 com\projectmanager\database\postgresql\dao\ProjetoDAO$3$2.class
 com\projectmanager\util\JSON$1.class
+com\projectmanager\util\RequestResponse.class
 com\projectmanager\Application.class
 com\projectmanager\database\postgresql\dao\ProjetoDAO$1.class
 com\projectmanager\model\Projeto.class
 com\projectmanager\database\postgresql\dao\ProjetoDAO$3.class
+com\projectmanager\util\Request.class
 com\projectmanager\util\Util.class
 com\projectmanager\database\postgresql\dao\ProjetoDAO$5$2.class
