@@ -220,6 +220,7 @@
                             url: "<%= BASE_URL %>/projectmanager/pessoa/atualizar",
                             type: "PUT",
                             success: function (data, statusText, jqXHR) {
+                                $(this).find(`button[type="submit"]`).addClass("disabled");
                                 toastr["success"](data.mensagem, "", { positionClass: "toast-top-full-width", closeButton: true, progressBar: true, newestOnTop: false, timeOut: 2000, onHidden: function () {
                                    window.location.href = "<%= BASE_URL %>/settings";
                                 }});
