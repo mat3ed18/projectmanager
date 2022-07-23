@@ -65,7 +65,7 @@
 
                                 <!-- COLUNA DO TRELLO #projetos-pendentes -->
 
-                                <div class="col-12 col-lg-6 col-xl-3 coluna-projetos">
+                                <div class="col-5 col-lg-6 col-xl-3 coluna-projetos">
                                     <div class="card">
                                         <div class="card-header">
                                             <h5 class="card-title btn bg-dark bg-opacity-50 text-white rounded-pill my-0 mx-0">pendente</h5>
@@ -78,7 +78,7 @@
 
                                 <!-- COLUNA DO TRELLO #projetos-em-analise -->
 
-                                <div class="col-12 col-lg-6 col-xl-3 coluna-projetos">
+                                <div class="col-5 col-lg-6 col-xl-3 coluna-projetos">
                                     <div class="card">
                                         <div class="card-header">
                                             <h5 class="card-title btn bg-gold text-dark rounded-pill my-0 mx-0">em análise</h5>
@@ -91,7 +91,7 @@
 
                                 <!-- COLUNA DO TRELLO #projetos-analise-realizada -->
 
-                                <div class="col-12 col-lg-6 col-xl-3 coluna-projetos">
+                                <div class="col-5 col-lg-6 col-xl-3 coluna-projetos">
                                     <div class="card">
                                         <div class="card-header">
                                             <h5 class="card-title btn bg-primary-light text-white rounded-pill my-0 mx-0">análise realizada</h5>
@@ -104,7 +104,7 @@
                                 
                                 <!-- COLUNA DO TRELLO #projetos-analise-aprovada -->
 
-                                <div class="col-12 col-lg-6 col-xl-3 coluna-projetos">
+                                <div class="col-5 col-lg-6 col-xl-3 coluna-projetos">
                                     <div class="card">
                                         <div class="card-header">
                                             <h5 class="card-title btn bg-primary text-white rounded-pill my-0 mx-0">análise aprovada</h5>
@@ -117,7 +117,7 @@
 
                                 <!-- COLUNA DO TRELLO #projetos-planejados -->
 
-                                <div class="col-12 col-lg-6 col-xl-3 coluna-projetos">
+                                <div class="col-5 col-lg-6 col-xl-3 coluna-projetos">
                                     <div class="card">
                                         <div class="card-header">
                                             <h5 class="card-title btn bg-secondary-light text-white rounded-pill my-0 mx-0">planejado</h5>
@@ -130,7 +130,7 @@
 
                                 <!-- COLUNA DO TRELLO #projetos-iniciado -->
 
-                                <div class="col-12 col-lg-6 col-xl-3 coluna-projetos">
+                                <div class="col-5 col-lg-6 col-xl-3 coluna-projetos">
                                     <div class="card">
                                         <div class="card-header">
                                             <h5 class="card-title btn bg-secondary text-white rounded-pill my-0 mx-0">iniciado</h5>
@@ -143,7 +143,7 @@
 
                                 <!-- COLUNA DO TRELLO #projetos-em-andamento -->
 
-                                <div class="col-12 col-lg-6 col-xl-3 coluna-projetos">
+                                <div class="col-5 col-lg-6 col-xl-3 coluna-projetos">
                                     <div class="card">
                                         <div class="card-header">
                                             <h5 class="card-title btn bg-success-light text-white rounded-pill my-0 mx-0">em andamento</h5>
@@ -156,7 +156,7 @@
 
                                 <!-- COLUNA DO TRELLO #projetos-encerrados -->
 
-                                <div class="col-12 col-lg-6 col-xl-3 coluna-projetos">
+                                <div class="col-5 col-lg-6 col-xl-3 coluna-projetos">
                                     <div class="card">
                                         <div class="card-header">
                                             <h5 class="card-title btn bg-success-dark text-white rounded-pill my-0 mx-0">encerrado</h5>
@@ -169,7 +169,7 @@
 
                                 <!-- COLUNA DO TRELLO #projetos-cancelados -->
 
-                                <div class="col-12 col-lg-6 col-xl-3 coluna-projetos">
+                                <div class="col-5 col-lg-6 col-xl-3 coluna-projetos">
                                     <div class="card">
                                         <div class="card-header">
                                             <h5 class="card-title btn btn-danger text-white rounded-pill my-0 mx-0">cancelado</h5>
