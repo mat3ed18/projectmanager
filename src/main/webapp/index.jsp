@@ -59,7 +59,7 @@
                                             <h5 class="card-title mb-0">Minha Conta</h5>
                                         </div>
                                         <ul class="list-group list-group-flush">
-                                            <li class="list-group-item"><a href="<%= BASE_URL %>/user">Perfil</a></li>
+                                            <li class="list-group-item"><a id="link_profile" href="<%= BASE_URL %>/user">Perfil</a></li>
                                             <li class="list-group-item"><a href="<%= BASE_URL %>/settings">Configurações</a></li>
                                         </ul>
                                     </div>
