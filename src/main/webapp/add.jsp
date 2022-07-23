@@ -282,7 +282,7 @@
                                 url: "<%= BASE_URL %>/projectmanager/projeto/<%= (request.getAttribute("editar") != null) ? "atualizar" : "salvar" %>",
                                 type: "<%= (request.getAttribute("editar") != null) ? "PUT" : "POST" %>",
                                 success: function (data, statusText, jqXHR) {
-                                    $(this).find(`button[type="submit"]`).addClass("disabled");
+                                    $("form").find(`button[type="submit"]`).addClass("disabled");
                                     toastr["success"]("O projeto foi <%= (request.getAttribute("editar") != null) ? "atualizado" : "cadastrado" %> com sucesso!", "", { positionClass: "toast-top-full-width", closeButton: true, progressBar: true, newestOnTop: false, timeOut: 2000, onHidden: function () {
                                         var id = "<%= (request.getAttribute("id") != null) ? request.getAttribute("id") : "" %>";
                                         if (typeof data.id !== "undefined") {

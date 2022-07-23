@@ -89,7 +89,7 @@
                                 url: "<%= BASE_URL %>/projectmanager/login",
                                 type: "POST",
                                 success: function (data, statusText, jqXHR) {
-                                    $(this).find(`button[type="submit"]`).addClass("disabled");
+                                    $("form").find(`button[type="submit"]`).addClass("disabled");
                                     toastr["success"]("Login efetuado com sucesso!", "Seja bem-vindo(a) " + data.nome, { positionClass: "toast-top-full-width", closeButton: true, progressBar: true, newestOnTop: false, timeOut: 2000, onHidden: function () {
                                         window.location.href = "<%= BASE_URL %>/home";
                                     }});
