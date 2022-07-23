@@ -41,10 +41,6 @@ import org.springframework.http.HttpStatus;
 
 public class Util {
     
-    public static void main(String[] args) throws IOException {
-        
-    }
-    
     public static ArrayList<String> getKeys(ObjectNode json) {
         Iterator<Entry<String, JsonNode>> nodes = json.fields();
         ArrayList<String> keys = new ArrayList() {{
