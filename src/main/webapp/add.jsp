@@ -62,10 +62,6 @@
                                                     <label class="form-label">data final</label>
                                                     <input type="date" class="form-control" name="dataFim" required/>
                                                 </div>
-                                                <div class="col-6 col-md-6 col-xxl-2 mb-3 error-placeholder">
-                                                    <label class="form-label">orçamento</label>
-                                                    <input type="number" class="form-control" name="orcamento" step="0.01" min="1" required/>
-                                                </div>
                                                 <div class="col-6 col-md-6 col-xxl-4 mb-3 error-placeholder">
                                                     <label class="form-label">gerente</label>
                                                     <div class="d-flex">
@@ -73,6 +69,10 @@
                                                             <option value=""></option>
                                                         </select>
                                                     </div>
+                                                </div>
+                                                <div class="col-12 col-md-12 col-xxl-2 mb-3 error-placeholder">
+                                                    <label class="form-label">orçamento</label>
+                                                    <input type="number" class="form-control" name="orcamento" step="0.01" min="1" required/>
                                                 </div>
                                                 <div class="col-12 mb-3 error-placeholder">
                                                     <label class="form-label">descrição</label>
