@@ -25,7 +25,7 @@
             </div>
         </div>
     </div>
-    <button id="buttonRecorder" class="btn btn-lg btn-danger"><i class="fas fa-microphone"></i></button>
+    <!-- <button id="buttonRecorder" class="btn btn-lg btn-danger"><i class="fas fa-microphone"></i></button> -->
     <style>
         #buttonRecorder {
             position: fixed;
