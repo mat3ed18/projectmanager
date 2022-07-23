@@ -140,12 +140,10 @@ public class ProjectManagerService {
         Request request = new Request();
         byte[] encodedAudio = Base64.encodeBase64(audio.getBytes());
         
-        String token = "AIzaSyBgMtO1uopLrub7KRiIgNUq3N7yHSJHCBs"; // TOKEN
-        
         request.setCharsetUTF8();
         
         request.addHeader("Content-Type", "application/json; charset=utf-8");
-        request.addHeader("Authorization", "Bearer " + token);
+        request.addHeader("Authorization", "Bearer ");
         
         request.setBody("{\"config\": {\"encoding\":\"FLAC\",\"sampleRateHertz\":16000,\"languageCode\":\"pt-BR\"},\"audio\": {\"content\": \"" + encodedAudio + "\"}}");
         
