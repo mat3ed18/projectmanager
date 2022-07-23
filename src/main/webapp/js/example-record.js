@@ -49,7 +49,7 @@ function createDownloadLink(blob) {
     au.attr("controls", true);
     au.attr("src", url);
     
-    console.log(" >>> " + url);
+    // console.log(" >>> " + url);
     
     link.attr("href", url);
     link.attr("download", filename + ".wav");
@@ -70,7 +70,7 @@ function createDownloadLink(blob) {
         processData: false,
         data: formData,
         success: function (data, statusText, jqXHR) {
-            console.log(data);
+            // console.log(data);
         },
         error: function (jqXHR, statusText, error) {
             console.log(jqXHR);
