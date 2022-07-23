@@ -50,15 +50,15 @@
                                                     <label class="form-label">nome</label>
                                                     <input type="text" class="form-control" name="nome" required/>
                                                 </div>
-                                                <div class="col-2 mb-3 error-placeholder">
+                                                <div class="col-4 col-md-6 col-xxl-2 mb-3 error-placeholder">
                                                     <label class="form-label">data inicial</label>
                                                     <input type="date" class="form-control" name="dataInicio" required/>
                                                 </div>
-                                                <div class="col-2 mb-3 error-placeholder">
+                                                <div class="col-4 col-md-6 col-xxl-2 mb-3 error-placeholder">
                                                     <label class="form-label">data de previsão do fim</label>
                                                     <input type="date" class="form-control" name="dataPrevisaoFim" required/>
                                                 </div>
-                                                <div class="col-2 mb-3 error-placeholder">
+                                                <div class="col-4 col-md-6 col-xxl-2 mb-3 error-placeholder">
                                                     <label class="form-label">data final</label>
                                                     <input type="date" class="form-control" name="dataFim" required/>
                                                 </div>
