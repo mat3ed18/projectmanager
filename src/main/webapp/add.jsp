@@ -62,11 +62,11 @@
                                                     <label class="form-label">data final</label>
                                                     <input type="date" class="form-control" name="dataFim" required/>
                                                 </div>
-                                                <div class="col-2 mb-3 error-placeholder">
+                                                <div class="col-6 col-md-6 col-xxl-2 mb-3 error-placeholder">
                                                     <label class="form-label">orçamento</label>
                                                     <input type="number" class="form-control" name="orcamento" step="0.01" min="1" required/>
                                                 </div>
-                                                <div class="col-4 mb-3 error-placeholder">
+                                                <div class="col-6 col-md-6 col-xxl-4 mb-3 error-placeholder">
                                                     <label class="form-label">gerente</label>
                                                     <div class="d-flex">
                                                         <select class="form-control select2-hidden-accessible" name="s_gerente" style="width: 100%" tabindex="-1" aria-hidden="true" aria-invalid="false" required>
