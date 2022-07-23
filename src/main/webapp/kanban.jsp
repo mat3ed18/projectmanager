@@ -194,10 +194,10 @@
                         document.querySelector(".columns-kanban")
                     ], {
                         margin: 30,
-                        maxSpeed: 50,
+                        maxSpeed: 30,
                         scrollWhenOutside: true,
                         autoScroll: function () {
-                            return this.down
+                            return this.down;
                         }
                     });
                     

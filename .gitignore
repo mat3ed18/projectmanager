@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Classes ###
+src/main/java/com/projectmanager/config/Config.java
