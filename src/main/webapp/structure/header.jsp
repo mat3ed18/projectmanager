@@ -20,4 +20,7 @@
             </li>
         </ul>
     </div>
+    <% if (request.getSession(false) != null) { %>
+    <input type="hidden" id="user_login" value="<%= request.getSession(false).getAttribute("user_id") %>">
+    <% } %>
 </nav>

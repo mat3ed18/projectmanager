@@ -128,12 +128,11 @@
                 </main>
                 <jsp:include page="structure/footer.jsp"/>
             </div>
-            <% if (request.getSession(false).getAttribute("user_id") != null) { %>
+            <% if (request.getSession(false) != null) { %>
             <input type="hidden" id="user_id" data-id="<%= request.getSession(false).getAttribute("user_id") %>">
             <% } %>
         </div>
         <jsp:include page="structure/scripts.jsp"/>
-        <jsp:include page="structure/script-login.jsp"/>
         <script src="<%= BASE_URL %>/js/scripts/pages/script_settings.js"></script>
     </body>
 </html>

@@ -7,4 +7,3 @@
 <script src="<%= BASE_URL %>/js/jquery.form.min.js"></script>
 <script src="<%= BASE_URL %>/js/dom-autoscroller.min.js"></script>
 <script src="<%= BASE_URL %>/js/scripts/script.js"></script>
-<script src="<%= BASE_URL %>/js/scripts/login.js"></script>

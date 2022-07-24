@@ -103,7 +103,6 @@
             <% } %>
         </div>
         <jsp:include page="structure/scripts.jsp"/>
-        <jsp:include page="structure/script-login.jsp"/>
         <script src="<%= BASE_URL %>/js/scripts/pages/script_project.js"></script>
     </body>
 </html>

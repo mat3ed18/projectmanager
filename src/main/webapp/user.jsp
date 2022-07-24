@@ -73,11 +73,10 @@
                 <jsp:include page="structure/footer.jsp"/>
             </div>
             <% if (request.getAttribute("id") != null) { %>
-            <input type="hidden" id="user" data-id="<%= request.getAttribute("id") %>">
+            <input type="hidden" id="user" value="<%= request.getAttribute("id") %>">
             <% } %>
         </div>
         <jsp:include page="structure/scripts.jsp"/>
-        <jsp:include page="structure/script-login.jsp"/>
         <script src="<%= BASE_URL %>/js/scripts/pages/script_user.js"></script>
     </body>
 </html>

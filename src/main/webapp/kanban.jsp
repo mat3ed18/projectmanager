@@ -163,8 +163,6 @@
             </div>
         </div>
         <jsp:include page="structure/scripts.jsp"/>
-        <jsp:include page="structure/script-login.jsp"/>
-        <script src="js/kanban.js"></script>
         <script src="<%= BASE_URL %>/js/scripts/pages/script_kanban.js"></script>
     </body>
 </html>

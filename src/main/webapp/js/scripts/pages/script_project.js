@@ -2,7 +2,7 @@ $(document).ready(function() {
     // project.jsp
     
     $.get(`${window.location.origin}/projectmanager/projeto`, {id: $("#project").attr("data-id")}, function (data) {
-        if (data != null) {
+        if (data != "") {
             $("#edit").attr("href", `${window.location.origin}/project/${data.id}/edit`);
             $("#nome").html(data.nome);
             $("#descricao").html(data.descricao);
