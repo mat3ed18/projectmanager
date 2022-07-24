@@ -2,7 +2,7 @@ $(document).ready(function() {
     // kanban.jsp
     
     var scroll = autoScroll([
-        $(".columns-kanban")
+        document.querySelector(".columns-kanban")
     ], {
         margin: 30,
         maxSpeed: 30,
@@ -11,8 +11,8 @@ $(document).ready(function() {
             return this.down;
         }
     });
-    
-    dragula([document.querySelector("#projetos-pendentes"), document.querySelector("#projetos-em-analise"), document.querySelector("#projetos-analise-realizada"), document.querySelector("#projetos-analise-aprovada"), document.querySelector("#projetos-planejados"), document.querySelector("#projetos-iniciado"), document.querySelector("#projetos-em-andamento"), document.querySelector("#projetos-encerrados"), document.querySelector("#projetos-cancelados")]).on("drop", function (el) {
+
+    dragula([$("#projetos-pendentes"), $("#projetos-em-analise"), $("#projetos-analise-realizada"), $("#projetos-analise-aprovada"), $("#projetos-planejados"), $("#projetos-iniciado"), $("#projetos-em-andamento"), $("#projetos-encerrados"), $("#projetos-cancelados")]).on("drop", function (el) {
         var card = $(el);
         var main = card.parent();
         card.attr("class", "card mb-3 " + main.attr("data-class"));

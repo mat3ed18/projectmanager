@@ -138,20 +138,24 @@ $(document).ready(function() {
         });
 
         $.get(`${window.location.origin}/projectmanager/projeto`, {id: $("#editar").val()}, function (data) {
-            $("#send-area").prepend("<input type='hidden' name='id' value='" + data.id + "'>");
-            
-            $("input[name='nome']").val(data.nome);
-            $("input[name='orcamento']").val(data.orcamento);
-            $("input[name='dataInicio']").val(data.dataInicio);
-            $("input[name='dataPrevisaoFim']").val(data.dataPrevisaoFim);
-            $("input[name='dataFim']").val(data.dataFim);
-            $("input[name='descricao']").val(data.descricao);
-            editor.root.innerHTML = data.descricao;
-            
-            setTimeout(function(){
-                $(`select[name="s_gerente"]`).val(data.gerente.id + "");
-                $(`select[name="s_gerente"]`).select2();
-            }, 2000);
+            if (data != null) {
+                $("#send-area").prepend("<input type='hidden' name='id' value='" + data.id + "'>");
+
+                $("input[name='nome']").val(data.nome);
+                $("input[name='orcamento']").val(data.orcamento);
+                $("input[name='dataInicio']").val(data.dataInicio);
+                $("input[name='dataPrevisaoFim']").val(data.dataPrevisaoFim);
+                $("input[name='dataFim']").val(data.dataFim);
+                $("input[name='descricao']").val(data.descricao);
+                editor.root.innerHTML = data.descricao;
+
+                setTimeout(function(){
+                    $(`select[name="s_gerente"]`).val(data.gerente.id + "");
+                    $(`select[name="s_gerente"]`).select2();
+                }, 2000);
+            } else {
+                window.location.href = `${window.location.origin}/404`;
+            }
         });
     }
     
