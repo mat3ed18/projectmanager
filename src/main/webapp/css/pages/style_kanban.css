@@ -1,0 +1,21 @@
+.card-body div[id*="projetos"] {
+    min-height: 50px;
+}
+
+.columns-kanban {
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.columns-kanban .coluna-projetos {
+    display: inline-block;
+    white-space: initial;
+}
+
+.wrapper::before {
+    z-index: -1;
+}
+
+.bg-gold {
+    background-color: gold;
+}

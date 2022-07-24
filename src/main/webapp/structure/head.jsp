@@ -8,8 +8,4 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <script src="<%= BASE_URL %>/js/settings.js"></script>
 <link href="<%= BASE_URL %>/css/modern.css" type="text/css" rel="stylesheet" />
-<style>
-    #toast-container {
-        margin-top: 2%;
-    }
-</style>
+<link href="<%= BASE_URL %>/css/pages/style.css" type="text/css" rel="stylesheet" />

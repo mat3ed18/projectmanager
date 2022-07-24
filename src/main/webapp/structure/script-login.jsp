@@ -17,7 +17,7 @@
             
             
         $(".sidebar-link").map(function() {
-            if ($(this).attr("href") == window.location.href) {
+            if (window.location.href.indexOf($(this).attr("href")) >= 0) {
                 $(this).parent().addClass("active");
                 $(this).parent().parent().addClass("show");
                 $(this).parent().parent().parent().addClass("active");

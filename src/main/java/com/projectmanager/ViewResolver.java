@@ -1,8 +1,6 @@
 package com.projectmanager;
 
-import com.projectmanager.database.postgresql.dao.ProjetoDAO;
 import jakarta.servlet.http.HttpServletRequest;
-import java.sql.SQLException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -14,16 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 public class ViewResolver {
     
-    public static void main(String[] args) throws SQLException {
-        System.out.println(ProjetoDAO.totalMembrosProjeto(2));
-//        Map<String, String> data = new HashMap();
-//        data.put("id", "1");
-//        ProjectManagerController control = new ProjectManagerController();
-//        System.out.println(control.projetos(data).getBody().toString());
-//        
-//        System.out.println(control.listarProjetos(new HashMap()));
-    }
-
     @RequestMapping("/")
     public String index() {
         return "/login.jsp";
@@ -37,6 +25,11 @@ public class ViewResolver {
     @RequestMapping("/home")
     public String home() {
         return "/index.jsp";
+    }
+    
+    @RequestMapping("/404")
+    public String error404() {
+        return "/404.jsp";
     }
     
     @RequestMapping("/project/add")
@@ -88,4 +81,11 @@ public class ViewResolver {
     public String redirect() {
         return "redirect:/home";
     }
+    
+    @RequestMapping({"/app", "/app/public", "/app/public/files", "/css", "/css/pages", "/fonts", "/img", "/img/avatars", "/js", "/js/scripts", "/js/scripts/pages", "/structure"})
+    public String notFound() {
+        return "redirect:/404";
+    }
+    
+    
 }
