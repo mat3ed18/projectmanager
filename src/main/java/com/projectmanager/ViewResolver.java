@@ -14,7 +14,7 @@ public class ViewResolver {
     
     @RequestMapping("/")
     public String index(HttpServletRequest request) {
-        if (request.getSession(false).getAttribute("user_id") != null) {
+        if (request.getSession(false) != null && request.getSession(false).getAttribute("user_id") != "") {
             return "redirect:/home";
         } else {
             return "/login.jsp";
@@ -32,7 +32,7 @@ public class ViewResolver {
     
     @RequestMapping("/home")
     public String home(HttpServletRequest request) {
-        if (request.getSession(false).getAttribute("user_id") != null) {
+        if (request.getSession(false) != null && request.getSession(false).getAttribute("user_id") != null) {
             return "/index.jsp";
         } else {
             return "redirect:/";
