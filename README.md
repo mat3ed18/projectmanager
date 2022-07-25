@@ -9,7 +9,7 @@ Este projeto foi ignorado pela empresa na seguinte devolutiva:
 
 Nos menosprezam por falta de formação, experiência, certificações, tecnologias ou até mesmo pela idade do candidato.
 
-Um absurdo, né? mas este projeto é uma prova de que todo desenvolvedor pode acreditar no seu código, independente em qual fase ele esteja de sua carreira ou das rejeições que tomou por essas empresas que impõem filtros para selecionar candidatos ou avaliam seu código de maneira subjetiva.
+Um absurdo, né? mas este projeto é uma prova de que todo desenvolvedor pode acreditar no seu código, independente em qual fase esteja de sua carreira ou das rejeições que tomou por essas empresas que impõem filtros para selecionar candidatos ou avaliam seu código de maneira subjetiva.
 
 http://projectmanager4.herokuapp.com/
 
